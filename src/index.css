@@ -38,6 +38,26 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Glassmorphism Design System */
+    --glass-background: 255 255 255 / 0.1;
+    --glass-border: 255 255 255 / 0.2;
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --glass-backdrop: blur(4px);
+    
+    /* Apple-inspired color palette */
+    --primary-blue: 212 100% 56%;
+    --primary-blue-dark: 211 85% 45%;
+    --primary-gradient: linear-gradient(135deg, hsl(var(--primary-blue)), hsl(var(--primary-blue-dark)));
+    
+    /* Smooth transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Elegant shadows */
+    --shadow-glass: 0 8px 32px rgba(31, 38, 135, 0.37);
+    --shadow-float: 0 20px 40px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 25px 50px rgba(0, 0, 0, 0.15);
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -101,5 +121,79 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Components */
+  .glass-card {
+    @apply backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-xl;
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:bg-white/20 hover:shadow-2xl hover:-translate-y-1;
+  }
+  
+  .glass-navbar {
+    @apply backdrop-blur-md bg-white/60 border-b border-white/20;
+    transition: var(--transition-smooth);
+  }
+  
+  .glass-navbar-scrolled {
+    @apply backdrop-blur-lg bg-white/80 shadow-lg;
+  }
+  
+  /* Apple-inspired buttons */
+  .btn-primary-glass {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-full font-medium;
+    @apply transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95;
+    background: var(--primary-gradient);
+  }
+  
+  /* Smooth zoom effect for navigation */
+  .nav-link {
+    @apply transition-transform duration-200 hover:scale-110;
+  }
+  
+  /* Floating animation */
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Fade in animations */
+  .fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Client card popup overlay */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+  }
+  
+  .modal-content {
+    @apply glass-card max-w-md w-full p-6 relative;
+    animation: modalAppear 0.3s ease-out;
+  }
+  
+  @keyframes modalAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
   }
 }
