@@ -31,8 +31,8 @@ const FooterSection = () => {
           setFooterContent({
             company_name: data.company_name,
             company_address: data.company_address,
-            links: Array.isArray(data.links) ? data.links : [],
-            social_media: typeof data.social_media === 'object' ? data.social_media as any : {}
+            links: Array.isArray(data.links) ? data.links as Array<{ text: string; url: string }> : [],
+            social_media: typeof data.social_media === 'object' ? data.social_media as { instagram?: string; facebook?: string; whatsapp?: string } : {}
           });
         }
       } catch (error) {
