@@ -56,27 +56,23 @@ const AboutSection = () => {
     <section id="about" className="py-20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-5 gap-12 items-center">
-          {/* Text Content - 60% on desktop */}
-          <div className="lg:col-span-3 order-2 lg:order-1">
-            <div className="glass-card p-8 fade-in">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                {content.title}
-              </h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                {content.description}
-              </p>
-            </div>
+          {/* Image - 40% on desktop */}
+          <div className="lg:col-span-2 order-1">
+            <img
+              src={content.image_url}
+              alt="About Us"
+              className="w-full h-80 object-cover rounded-xl shadow-lg"
+            />
           </div>
 
-          {/* Image - 40% on desktop */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
-            <div className="glass-card-hover p-4">
-              <img
-                src={content.image_url}
-                alt="About Us"
-                className="w-full h-80 object-cover rounded-xl"
-              />
-            </div>
+          {/* Text Content - 60% on desktop */}
+          <div className="lg:col-span-3 order-2 space-y-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              {content.title}
+            </h2>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              {content.description}
+            </p>
           </div>
         </div>
       </div>

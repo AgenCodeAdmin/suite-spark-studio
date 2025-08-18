@@ -73,18 +73,15 @@ const ClientsSection = () => {
             {clients.map((client, index) => (
               <div
                 key={client.id}
-                className="glass-card-hover p-6 cursor-pointer group"
+                className="cursor-pointer group transition-all duration-300 hover:scale-105"
                 onClick={() => openModal(client)}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <img
                   src={client.logo_url}
                   alt={client.name}
-                  className="w-full h-24 object-contain mx-auto group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-24 object-contain mx-auto filter grayscale hover:grayscale-0 transition-all duration-300 group-hover:scale-110"
                 />
-                <h3 className="text-center mt-4 font-semibold text-gray-900">
-                  {client.name}
-                </h3>
               </div>
             ))}
           </div>

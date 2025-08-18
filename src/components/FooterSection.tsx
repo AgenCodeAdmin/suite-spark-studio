@@ -73,26 +73,26 @@ const FooterSection = () => {
   }
 
   return (
-    <footer id="contact" className="py-20 bg-gradient-to-t from-gray-900 to-gray-800 text-white">
+    <footer id="footer" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-12">
           {/* Company Info */}
-          <div className="glass-card p-6 bg-white/5">
-            <h3 className="text-2xl font-bold mb-4">{content.company_name}</h3>
-            <p className="text-gray-300 leading-relaxed">
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">{content.company_name}</h3>
+            <p className="text-gray-600 leading-relaxed">
               {content.company_address}
             </p>
           </div>
 
           {/* Links */}
-          <div className="glass-card p-6 bg-white/5">
-            <h3 className="text-2xl font-bold mb-4">Quick Links</h3>
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Quick Links</h3>
             <ul className="space-y-3">
               {content.links.map((link, index) => (
                 <li key={index}>
                   <a
                     href={link.url}
-                    className="text-gray-300 hover:text-white transition-colors"
+                    className="text-gray-600 hover:text-primary transition-colors duration-200"
                   >
                     {link.text}
                   </a>
@@ -102,15 +102,15 @@ const FooterSection = () => {
           </div>
 
           {/* Social Media */}
-          <div className="glass-card p-6 bg-white/5">
-            <h3 className="text-2xl font-bold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Follow Us</h3>
+            <div className="flex justify-center md:justify-start space-x-4">
               {content.social_media.instagram && (
                 <a
                   href={content.social_media.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform text-white"
                 >
                   <Instagram size={20} />
                 </a>
@@ -120,7 +120,7 @@ const FooterSection = () => {
                   href={content.social_media.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform text-white"
                 >
                   <Facebook size={20} />
                 </a>
@@ -130,7 +130,7 @@ const FooterSection = () => {
                   href={content.social_media.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:scale-110 transition-transform text-white"
                 >
                   <MessageCircle size={20} />
                 </a>
@@ -139,8 +139,8 @@ const FooterSection = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/20 text-center">
-          <p className="text-gray-400">
+        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+          <p className="text-gray-600">
             © 2024 {content.company_name}. All rights reserved.
           </p>
         </div>

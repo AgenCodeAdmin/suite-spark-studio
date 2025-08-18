@@ -136,6 +136,7 @@ const AdminDashboard = () => {
     }
   };
 
+  // Services management
   const addService = () => {
     setServices([...services, {
       title: '',
@@ -159,16 +160,24 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       // Delete all existing services and insert new ones
-      await supabase.from('services').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      await supabase.from('services').delete().gte('id', '00000000-0000-0000-0000-000000000000');
       
-      const { error } = await supabase
-        .from('services')
-        .insert(services.map((service, index) => ({
-          ...service,
-          order_index: index
-        })));
+      const servicesToSave = services.filter(service => 
+        service.title.trim() !== '' && service.description.trim() !== ''
+      );
+      
+      if (servicesToSave.length > 0) {
+        const { error } = await supabase
+          .from('services')
+          .insert(servicesToSave.map((service, index) => ({
+            title: service.title,
+            description: service.description,
+            image_url: service.image_url || null,
+            order_index: index
+          })));
 
-      if (error) throw error;
+        if (error) throw error;
+      }
 
       toast({
         title: 'Success',
@@ -180,6 +189,216 @@ const AdminDashboard = () => {
       toast({
         title: 'Error',
         description: 'Failed to update services',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Clients management
+  const addClient = () => {
+    setClients([...clients, {
+      name: '',
+      logo_url: '',
+      description: '',
+      order_index: clients.length
+    }]);
+  };
+
+  const updateClient = (index: number, field: string, value: string) => {
+    const updated = [...clients];
+    updated[index] = { ...updated[index], [field]: value };
+    setClients(updated);
+  };
+
+  const removeClient = (index: number) => {
+    setClients(clients.filter((_, i) => i !== index));
+  };
+
+  const saveClients = async () => {
+    setLoading(true);
+    try {
+      await supabase.from('clients').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+      
+      const clientsToSave = clients.filter(client => 
+        client.name.trim() !== '' && client.logo_url.trim() !== ''
+      );
+      
+      if (clientsToSave.length > 0) {
+        const { error } = await supabase
+          .from('clients')
+          .insert(clientsToSave.map((client, index) => ({
+            name: client.name,
+            logo_url: client.logo_url,
+            description: client.description || '',
+            order_index: index
+          })));
+
+        if (error) throw error;
+      }
+
+      toast({
+        title: 'Success',
+        description: 'Clients updated successfully',
+      });
+      
+      fetchAllContent();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update clients',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Pricing management
+  const addPricingPlan = () => {
+    setPricingPlans([...pricingPlans, {
+      name: '',
+      price: '',
+      features: [],
+      is_featured: false,
+      order_index: pricingPlans.length
+    }]);
+  };
+
+  const updatePricingPlan = (index: number, field: string, value: any) => {
+    const updated = [...pricingPlans];
+    updated[index] = { ...updated[index], [field]: value };
+    setPricingPlans(updated);
+  };
+
+  const removePricingPlan = (index: number) => {
+    setPricingPlans(pricingPlans.filter((_, i) => i !== index));
+  };
+
+  const savePricingPlans = async () => {
+    setLoading(true);
+    try {
+      await supabase.from('pricing_plans').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+      
+      const plansToSave = pricingPlans.filter(plan => 
+        plan.name.trim() !== '' && plan.price.trim() !== ''
+      );
+      
+      if (plansToSave.length > 0) {
+        const { error } = await supabase
+          .from('pricing_plans')
+          .insert(plansToSave.map((plan, index) => ({
+            name: plan.name,
+            price: plan.price,
+            features: plan.features,
+            is_featured: plan.is_featured,
+            order_index: index
+          })));
+
+        if (error) throw error;
+      }
+
+      toast({
+        title: 'Success',
+        description: 'Pricing plans updated successfully',
+      });
+      
+      fetchAllContent();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update pricing plans',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Reviews management
+  const addReview = () => {
+    setCustomerReviews([...customerReviews, {
+      customer_name: '',
+      designation: '',
+      company_name: '',
+      review_text: '',
+      order_index: customerReviews.length
+    }]);
+  };
+
+  const updateReview = (index: number, field: string, value: string) => {
+    const updated = [...customerReviews];
+    updated[index] = { ...updated[index], [field]: value };
+    setCustomerReviews(updated);
+  };
+
+  const removeReview = (index: number) => {
+    setCustomerReviews(customerReviews.filter((_, i) => i !== index));
+  };
+
+  const saveReviews = async () => {
+    setLoading(true);
+    try {
+      await supabase.from('customer_reviews').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+      
+      const reviewsToSave = customerReviews.filter(review => 
+        review.customer_name.trim() !== '' && review.review_text.trim() !== ''
+      );
+      
+      if (reviewsToSave.length > 0) {
+        const { error } = await supabase
+          .from('customer_reviews')
+          .insert(reviewsToSave.map((review, index) => ({
+            customer_name: review.customer_name,
+            designation: review.designation,
+            company_name: review.company_name,
+            review_text: review.review_text,
+            order_index: index
+          })));
+
+        if (error) throw error;
+      }
+
+      toast({
+        title: 'Success',
+        description: 'Reviews updated successfully',
+      });
+      
+      fetchAllContent();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update reviews',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveFooterContent = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('footer_content')
+        .upsert({
+          company_name: footerContent.company_name,
+          company_address: footerContent.company_address,
+          links: JSON.parse(footerContent.links),
+          social_media: JSON.parse(footerContent.social_media)
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: 'Footer content updated successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update footer content',
         variant: 'destructive',
       });
     } finally {
@@ -366,40 +585,239 @@ const AdminDashboard = () => {
               </Card>
             </TabsContent>
 
-            {/* Other tabs would follow similar patterns */}
+            {/* Clients Content */}
             <TabsContent value="clients">
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle>Clients Section</CardTitle>
-                  <CardDescription>Coming soon - Client management interface</CardDescription>
+                  <CardDescription>Manage your client logos and information</CardDescription>
                 </CardHeader>
+                <CardContent className="space-y-6">
+                  {clients.map((client, index) => (
+                    <div key={index} className="glass-card p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-semibold">Client {index + 1}</h4>
+                        <Button 
+                          onClick={() => removeClient(index)} 
+                          variant="destructive" 
+                          size="sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Input
+                        placeholder="Client Name"
+                        value={client.name}
+                        onChange={(e) => updateClient(index, 'name', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Logo URL"
+                        value={client.logo_url}
+                        onChange={(e) => updateClient(index, 'logo_url', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Textarea
+                        placeholder="Client Description"
+                        value={client.description}
+                        onChange={(e) => updateClient(index, 'description', e.target.value)}
+                        className="glass-card"
+                      />
+                    </div>
+                  ))}
+                  <div className="flex space-x-3">
+                    <Button onClick={addClient} variant="outline" className="glass-card">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Client
+                    </Button>
+                    <Button onClick={saveClients} disabled={loading} className="btn-primary-glass">
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Clients
+                    </Button>
+                  </div>
+                </CardContent>
               </Card>
             </TabsContent>
 
+            {/* Pricing Content */}
             <TabsContent value="pricing">
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle>Pricing Plans</CardTitle>
-                  <CardDescription>Coming soon - Pricing management interface</CardDescription>
+                  <CardDescription>Manage your pricing plans</CardDescription>
                 </CardHeader>
+                <CardContent className="space-y-6">
+                  {pricingPlans.map((plan, index) => (
+                    <div key={index} className="glass-card p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-semibold">Plan {index + 1}</h4>
+                        <Button 
+                          onClick={() => removePricingPlan(index)} 
+                          variant="destructive" 
+                          size="sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Input
+                        placeholder="Plan Name"
+                        value={plan.name}
+                        onChange={(e) => updatePricingPlan(index, 'name', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Price (e.g., $499/mo)"
+                        value={plan.price}
+                        onChange={(e) => updatePricingPlan(index, 'price', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Textarea
+                        placeholder="Features (one per line)"
+                        value={plan.features.join('\n')}
+                        onChange={(e) => updatePricingPlan(index, 'features', e.target.value.split('\n').filter(f => f.trim()))}
+                        className="glass-card"
+                        rows={4}
+                      />
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={plan.is_featured}
+                          onChange={(e) => updatePricingPlan(index, 'is_featured', e.target.checked)}
+                          className="rounded"
+                        />
+                        <Label>Featured Plan</Label>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="flex space-x-3">
+                    <Button onClick={addPricingPlan} variant="outline" className="glass-card">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Plan
+                    </Button>
+                    <Button onClick={savePricingPlans} disabled={loading} className="btn-primary-glass">
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Plans
+                    </Button>
+                  </div>
+                </CardContent>
               </Card>
             </TabsContent>
 
+            {/* Reviews Content */}
             <TabsContent value="reviews">
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle>Customer Reviews</CardTitle>
-                  <CardDescription>Coming soon - Review management interface</CardDescription>
+                  <CardDescription>Manage customer testimonials</CardDescription>
                 </CardHeader>
+                <CardContent className="space-y-6">
+                  {customerReviews.map((review, index) => (
+                    <div key={index} className="glass-card p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-semibold">Review {index + 1}</h4>
+                        <Button 
+                          onClick={() => removeReview(index)} 
+                          variant="destructive" 
+                          size="sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Input
+                        placeholder="Customer Name"
+                        value={review.customer_name}
+                        onChange={(e) => updateReview(index, 'customer_name', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Designation"
+                        value={review.designation}
+                        onChange={(e) => updateReview(index, 'designation', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Company Name"
+                        value={review.company_name}
+                        onChange={(e) => updateReview(index, 'company_name', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Textarea
+                        placeholder="Review Text"
+                        value={review.review_text}
+                        onChange={(e) => updateReview(index, 'review_text', e.target.value)}
+                        className="glass-card"
+                        rows={3}
+                      />
+                    </div>
+                  ))}
+                  <div className="flex space-x-3">
+                    <Button onClick={addReview} variant="outline" className="glass-card">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Review
+                    </Button>
+                    <Button onClick={saveReviews} disabled={loading} className="btn-primary-glass">
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Reviews
+                    </Button>
+                  </div>
+                </CardContent>
               </Card>
             </TabsContent>
 
+            {/* Footer Content */}
             <TabsContent value="footer">
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle>Footer Content</CardTitle>
-                  <CardDescription>Coming soon - Footer management interface</CardDescription>
+                  <CardDescription>Manage footer information</CardDescription>
                 </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="company-name">Company Name</Label>
+                    <Input
+                      id="company-name"
+                      value={footerContent.company_name}
+                      onChange={(e) => setFooterContent({...footerContent, company_name: e.target.value})}
+                      className="glass-card"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="company-address">Company Address</Label>
+                    <Textarea
+                      id="company-address"
+                      value={footerContent.company_address}
+                      onChange={(e) => setFooterContent({...footerContent, company_address: e.target.value})}
+                      className="glass-card"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="footer-links">Links (JSON format)</Label>
+                    <Textarea
+                      id="footer-links"
+                      value={footerContent.links}
+                      onChange={(e) => setFooterContent({...footerContent, links: e.target.value})}
+                      className="glass-card"
+                      placeholder='[{"text": "Privacy Policy", "url": "#"}, {"text": "Terms of Service", "url": "#"}]'
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="social-media">Social Media (JSON format)</Label>
+                    <Textarea
+                      id="social-media"
+                      value={footerContent.social_media}
+                      onChange={(e) => setFooterContent({...footerContent, social_media: e.target.value})}
+                      className="glass-card"
+                      placeholder='{"instagram": "https://instagram.com", "facebook": "https://facebook.com", "whatsapp": "https://whatsapp.com"}'
+                      rows={3}
+                    />
+                  </div>
+                  <Button onClick={saveFooterContent} disabled={loading} className="btn-primary-glass">
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Footer Content
+                  </Button>
+                </CardContent>
               </Card>
             </TabsContent>
           </Tabs>

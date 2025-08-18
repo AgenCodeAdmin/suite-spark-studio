@@ -82,8 +82,8 @@ const PricingSection = () => {
           {pricingPlans.map((plan, index) => (
             <div
               key={plan.id}
-              className={`glass-card-hover p-8 relative ${
-                plan.is_featured ? 'ring-2 ring-blue-500 scale-105' : ''
+              className={`glass-card-hover p-8 relative flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                plan.is_featured ? 'ring-2 ring-blue-500 transform scale-105' : ''
               }`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
@@ -102,7 +102,7 @@ const PricingSection = () => {
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-8 flex-grow">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-center space-x-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -112,7 +112,7 @@ const PricingSection = () => {
               </ul>
 
               <Button 
-                className={`w-full ${
+                className={`w-full mt-auto transition-all duration-300 hover:scale-105 transform hover:shadow-lg ${
                   plan.is_featured 
                     ? 'btn-primary-glass' 
                     : 'bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50'
@@ -138,29 +138,43 @@ const PricingSection = () => {
           </h3>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {customerReviews.map((review, index) => (
-            <div
-              key={review.id}
-              className="glass-card-hover p-6"
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              <p className="text-gray-700 mb-6 leading-relaxed italic">
-                "{review.review_text}"
-              </p>
-              <div>
-                <h4 className="font-bold text-gray-900 text-lg">
-                  {review.customer_name}
-                </h4>
-                <p className="text-gray-600">
-                  {review.designation}
+        <div className="relative overflow-hidden">
+          <div 
+            className="flex gap-8 animate-scroll-reviews"
+            style={{
+              width: `${customerReviews.length * 400}px`,
+              animation: 'scroll-reviews 20s linear infinite'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.animationPlayState = 'paused';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.animationPlayState = 'running';
+            }}
+          >
+            {[...customerReviews, ...customerReviews].map((review, index) => (
+              <div
+                key={`${review.id}-${index}`}
+                className="glass-card-hover p-6 min-w-[350px] flex-shrink-0 hover:scale-105 transition-transform duration-300"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <p className="text-gray-700 mb-6 leading-relaxed italic">
+                  "{review.review_text}"
                 </p>
-                <p className="text-gray-600">
-                  {review.company_name}
-                </p>
+                <div>
+                  <h4 className="font-bold text-gray-900 text-lg">
+                    {review.customer_name}
+                  </h4>
+                  <p className="text-gray-600">
+                    {review.designation}
+                  </p>
+                  <p className="text-gray-600">
+                    {review.company_name}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

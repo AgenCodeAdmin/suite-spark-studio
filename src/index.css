@@ -196,4 +196,22 @@ All colors MUST be HSL.
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
   }
+  
+  /* Infinite scroll animation for reviews */
+  @keyframes scroll-reviews {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll-reviews {
+    animation: scroll-reviews 20s linear infinite;
+  }
+
+  .animate-scroll-reviews:hover {
+    animation-play-state: paused;
+  }
 }
