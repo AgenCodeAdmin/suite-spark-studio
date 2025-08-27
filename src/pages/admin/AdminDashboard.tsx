@@ -9,6 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { LogOut, Save, Plus, Trash2 } from 'lucide-react';
+import AccordionCrud from '@/pages/admin/AccordionCrud'
+
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -17,10 +19,12 @@ const AdminDashboard = () => {
 
   // State for all content types
   const [heroContent, setHeroContent] = useState({
+    id: null, // Add id to state
     headline: '',
     subheadline: '',
     background_image_url: '',
-    cta_text: 'Get Started Now'
+    cta_text: 'Get Started Now',
+    cta_link: ''
   });
 
   const [aboutContent, setAboutContent] = useState({
@@ -34,20 +38,22 @@ const AdminDashboard = () => {
   const [pricingPlans, setPricingPlans] = useState<any[]>([]);
   const [customerReviews, setCustomerReviews] = useState<any[]>([]);
   const [footerContent, setFooterContent] = useState({
+    id: null,
     company_name: '',
     company_address: '',
-    links: '[]',
-    social_media: '{}'
+    links: [],
+    social_media: {}
   });
 
   useEffect(() => {
-    // Check if user is logged in
-    const isLoggedIn = localStorage.getItem('adminLoggedIn');
-    if (!isLoggedIn) {
-      navigate('/admin/login');
-      return;
-    }
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate('/admin/login');
+      }
+    };
 
+    checkUser();
     fetchAllContent();
   }, [navigate]);
 
@@ -55,26 +61,43 @@ const AdminDashboard = () => {
     try {
       // Fetch all content in parallel
       const [heroRes, aboutRes, servicesRes, clientsRes, pricingRes, reviewsRes, footerRes] = await Promise.all([
-        supabase.from('hero_content').select('*').single(),
+        supabase.from('hero_content').select('*').limit(1).single(),
         supabase.from('about_content').select('*').single(),
         supabase.from('services').select('*').order('order_index'),
         supabase.from('clients').select('*').order('order_index'),
         supabase.from('pricing_plans').select('*').order('order_index'),
         supabase.from('customer_reviews').select('*').order('order_index'),
-        supabase.from('footer_content').select('*').single()
+        supabase.from('footer_content').select('*').limit(1).single()
       ]);
 
-      if (heroRes.data) setHeroContent(heroRes.data);
+      if (heroRes.data) {
+        setHeroContent({ ...heroRes.data, id: heroRes.data.id });
+      } else {
+        // Initialize id to null for initial insert, Supabase will generate it
+        setHeroContent({
+          id: null,
+          headline: '',
+          subheadline: '',
+          background_image_url: '',
+          cta_text: 'Get Started Now',
+          cta_link: ''
+        });
+      }
       if (aboutRes.data) setAboutContent(aboutRes.data);
       if (servicesRes.data) setServices(servicesRes.data);
       if (clientsRes.data) setClients(clientsRes.data);
       if (pricingRes.data) setPricingPlans(pricingRes.data);
       if (reviewsRes.data) setCustomerReviews(reviewsRes.data);
       if (footerRes.data) {
+        setFooterContent(footerRes.data);
+      } else {
+        // Initialize with a default object if no data is found
         setFooterContent({
-          ...footerRes.data,
-          links: JSON.stringify(footerRes.data.links),
-          social_media: JSON.stringify(footerRes.data.social_media)
+          id: null,
+          company_name: '',
+          company_address: '',
+          links: [],
+          social_media: {},
         });
       }
     } catch (error) {
@@ -82,14 +105,14 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminLoggedIn');
-    localStorage.removeItem('adminUser');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     navigate('/admin/login');
   };
 
   const saveHeroContent = async () => {
     setLoading(true);
+    console.log('heroContent before save:', heroContent);
     try {
       const { error } = await supabase
         .from('hero_content')
@@ -101,6 +124,7 @@ const AdminDashboard = () => {
         title: 'Success',
         description: 'Hero content updated successfully',
       });
+      fetchAllContent();
     } catch (error) {
       toast({
         title: 'Error',
@@ -115,9 +139,12 @@ const AdminDashboard = () => {
   const saveAboutContent = async () => {
     setLoading(true);
     try {
+      const { id, ...rest } = aboutContent;
+      const dataToSave = id ? { ...rest, id } : rest;
+
       const { error } = await supabase
         .from('about_content')
-        .upsert(aboutContent);
+        .upsert(dataToSave);
 
       if (error) throw error;
 
@@ -125,6 +152,7 @@ const AdminDashboard = () => {
         title: 'Success',
         description: 'About content updated successfully',
       });
+      fetchAllContent();
     } catch (error) {
       toast({
         title: 'Error',
@@ -173,6 +201,9 @@ const AdminDashboard = () => {
             title: service.title,
             description: service.description,
             image_url: service.image_url || null,
+            popup_description: service.popup_description,
+            popup_button_text: service.popup_button_text,
+            popup_button_link: service.popup_button_link,
             order_index: index
           })));
 
@@ -328,6 +359,9 @@ const AdminDashboard = () => {
   };
 
   const updateReview = (index: number, field: string, value: string) => {
+    if (field === 'review_text' && value.length > 186) {
+      return; // Do not update state if character limit is exceeded
+    }
     const updated = [...customerReviews];
     updated[index] = { ...updated[index], [field]: value };
     setCustomerReviews(updated);
@@ -343,7 +377,7 @@ const AdminDashboard = () => {
       await supabase.from('customer_reviews').delete().gte('id', '00000000-0000-0000-0000-000000000000');
       
       const reviewsToSave = customerReviews.filter(review => 
-        review.customer_name.trim() !== '' && review.review_text.trim() !== ''
+        review.customer_name.trim() !== '' && review.review_text.trim() !== '' && review.review_text.length <= 186
       );
       
       if (reviewsToSave.length > 0) {
@@ -382,12 +416,7 @@ const AdminDashboard = () => {
     try {
       const { error } = await supabase
         .from('footer_content')
-        .upsert({
-          company_name: footerContent.company_name,
-          company_address: footerContent.company_address,
-          links: JSON.parse(footerContent.links),
-          social_media: JSON.parse(footerContent.social_media)
-        });
+        .upsert(footerContent, { onConflict: 'id' });
 
       if (error) throw error;
 
@@ -395,6 +424,20 @@ const AdminDashboard = () => {
         title: 'Success',
         description: 'Footer content updated successfully',
       });
+
+      // Fetch the latest data and update the state
+      const { data, error: fetchError } = await supabase
+        .from('footer_content')
+        .select('*')
+        .limit(1)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      if (data) {
+        setFooterContent(data);
+      }
+
     } catch (error) {
       toast({
         title: 'Error',
@@ -433,6 +476,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="pricing">Pricing</TabsTrigger>
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="footer">Footer</TabsTrigger>
+              <TabsTrigger value="accordion">Accordion Content</TabsTrigger>
             </TabsList>
 
             {/* Hero Content */}
@@ -449,8 +493,12 @@ const AdminDashboard = () => {
                       id="headline"
                       value={heroContent.headline}
                       onChange={(e) => setHeroContent({...heroContent, headline: e.target.value})}
+                      maxLength={25}
                       className="glass-card"
                     />
+                    <p className="text-sm text-gray-500 text-right">
+                      {heroContent.headline.length}/25
+                    </p>
                   </div>
                   <div>
                     <Label htmlFor="subheadline">Subheadline</Label>
@@ -476,6 +524,15 @@ const AdminDashboard = () => {
                       id="cta-text"
                       value={heroContent.cta_text}
                       onChange={(e) => setHeroContent({...heroContent, cta_text: e.target.value})}
+                      className="glass-card"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="cta-link">CTA Button Link</Label>
+                    <Input
+                      id="cta-link"
+                      value={heroContent.cta_link}
+                      onChange={(e) => setHeroContent({...heroContent, cta_link: e.target.value})}
                       className="glass-card"
                     />
                   </div>
@@ -567,6 +624,24 @@ const AdminDashboard = () => {
                         placeholder="Image URL"
                         value={service.image_url}
                         onChange={(e) => updateService(index, 'image_url', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Textarea
+                        placeholder="Popup Description"
+                        value={service.popup_description}
+                        onChange={(e) => updateService(index, 'popup_description', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Popup Button Text"
+                        value={service.popup_button_text}
+                        onChange={(e) => updateService(index, 'popup_button_text', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Popup Button Link"
+                        value={service.popup_button_link}
+                        onChange={(e) => updateService(index, 'popup_button_link', e.target.value)}
                         className="glass-card"
                       />
                     </div>
@@ -747,7 +822,11 @@ const AdminDashboard = () => {
                         onChange={(e) => updateReview(index, 'review_text', e.target.value)}
                         className="glass-card"
                         rows={3}
+                        maxLength={186}
                       />
+                      <p className="text-sm text-gray-500 text-right">
+                        {review.review_text.length}/186
+                      </p>
                     </div>
                   ))}
                   <div className="flex space-x-3">
@@ -764,6 +843,7 @@ const AdminDashboard = () => {
               </Card>
             </TabsContent>
 
+          
             {/* Footer Content */}
             <TabsContent value="footer">
               <Card className="glass-card">
@@ -792,26 +872,76 @@ const AdminDashboard = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="footer-links">Links (JSON format)</Label>
-                    <Textarea
-                      id="footer-links"
-                      value={footerContent.links}
-                      onChange={(e) => setFooterContent({...footerContent, links: e.target.value})}
+                    <Label>Links</Label>
+                    {footerContent.links.map((link, index) => (
+                      <div key={index} className="flex items-center space-x-2 mb-2">
+                        <Input
+                          placeholder="Link Text"
+                          value={link.text}
+                          onChange={(e) => {
+                            const newLinks = [...footerContent.links];
+                            newLinks[index].text = e.target.value;
+                            setFooterContent({ ...footerContent, links: newLinks });
+                          }}
+                          className="glass-card"
+                        />
+                        <Input
+                          placeholder="Link URL"
+                          value={link.url}
+                          onChange={(e) => {
+                            const newLinks = [...footerContent.links];
+                            newLinks[index].url = e.target.value;
+                            setFooterContent({ ...footerContent, links: newLinks });
+                          }}
+                          className="glass-card"
+                        />
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => {
+                            const newLinks = footerContent.links.filter((_, i) => i !== index);
+                            setFooterContent({ ...footerContent, links: newLinks });
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const newLinks = [...footerContent.links, { text: '', url: '' }];
+                        setFooterContent({ ...footerContent, links: newLinks });
+                      }}
                       className="glass-card"
-                      placeholder='[{"text": "Privacy Policy", "url": "#"}, {"text": "Terms of Service", "url": "#"}]'
-                      rows={3}
-                    />
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Link
+                    </Button>
                   </div>
                   <div>
-                    <Label htmlFor="social-media">Social Media (JSON format)</Label>
-                    <Textarea
-                      id="social-media"
-                      value={footerContent.social_media}
-                      onChange={(e) => setFooterContent({...footerContent, social_media: e.target.value})}
-                      className="glass-card"
-                      placeholder='{"instagram": "https://instagram.com", "facebook": "https://facebook.com", "whatsapp": "https://whatsapp.com"}'
-                      rows={3}
-                    />
+                    <Label>Social Media</Label>
+                    <div className="space-y-2">
+                      <Input
+                        placeholder="Instagram URL"
+                        value={footerContent.social_media.instagram || ''}
+                        onChange={(e) => setFooterContent({ ...footerContent, social_media: { ...footerContent.social_media, instagram: e.target.value } })}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="Facebook URL"
+                        value={footerContent.social_media.facebook || ''}
+                        onChange={(e) => setFooterContent({ ...footerContent, social_media: { ...footerContent.social_media, facebook: e.target.value } })}
+                        className="glass-card"
+                      />
+                      <Input
+                        placeholder="WhatsApp URL"
+                        value={footerContent.social_media.whatsapp || ''}
+                        onChange={(e) => setFooterContent({ ...footerContent, social_media: { ...footerContent.social_media, whatsapp: e.target.value } })}
+                        className="glass-card"
+                      />
+                    </div>
                   </div>
                   <Button onClick={saveFooterContent} disabled={loading} className="btn-primary-glass">
                     <Save className="w-4 h-4 mr-2" />
@@ -819,6 +949,11 @@ const AdminDashboard = () => {
                   </Button>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            {/* Accordion Content */}
+            <TabsContent value="accordion">
+              <AccordionCrud />
             </TabsContent>
           </Tabs>
         </div>
@@ -828,3 +963,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

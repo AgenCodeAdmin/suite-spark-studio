@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { X } from 'lucide-react';
 
 interface Client {
   id: string;
@@ -12,7 +11,6 @@ interface Client {
 
 const ClientsSection = () => {
   const [clients, setClients] = useState<Client[]>([]);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,77 +36,78 @@ const ClientsSection = () => {
     fetchClients();
   }, []);
 
-  const openModal = (client: Client) => {
-    setSelectedClient(client);
-  };
-
-  const closeModal = () => {
-    setSelectedClient(null);
-  };
-
   if (loading) {
     return (
-      <section id="clients" className="py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="animate-pulse">Loading...</div>
-        </div>
+      <section id="clients" className="bg-white flex items-center justify-center py-20">
+        <div className="animate-pulse">Loading...</div>
       </section>
     );
   }
 
+  const duplicatedClients = Array(5).fill([...clients]).flat();
+
   return (
     <>
-      <section id="clients" className="py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Our Clients
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Trusted by leading companies across various industries
-            </p>
-          </div>
+      <style>
+        {`
+          .clients-scrolling-wrapper {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+          }
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {clients.map((client, index) => (
-              <div
-                key={client.id}
-                className="cursor-pointer group transition-all duration-300 hover:scale-105"
-                onClick={() => openModal(client)}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <img
-                  src={client.logo_url}
-                  alt={client.name}
-                  className="w-full h-24 object-contain mx-auto filter grayscale hover:grayscale-0 transition-all duration-300 group-hover:scale-110"
-                />
+          .clients-scrolling-content {
+            display: flex;
+            flex-shrink: 0;
+            animation: clients-scroll 20s linear infinite; /* Faster animation */
+          }
+
+          @keyframes clients-scroll {
+            from {
+              transform: translateX(0);
+            }
+            to {
+              transform: translateX(-50%);
+            }
+          }
+
+          .client-logo {
+            flex: 0 0 auto;
+            margin: 0 2rem;
+            transition: transform 0.3s ease;
+          }
+
+          .client-logo img {
+            height: 80px; /* Adjust height as needed */
+            width: auto;
+            object-fit: contain;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+          }
+
+          .client-logo:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+          }
+        `}
+      </style>
+      <section id="clients" className="bg-white py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Our Clients</h2>
+          <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div>
+        </div>
+        <div className="clients-scrolling-wrapper">
+          <div className="clients-scrolling-content">
+            {duplicatedClients.map((client, index) => (
+              <div key={`${client.id}-${index}`} className="client-logo">
+                <img src={client.logo_url} alt={client.name} />
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Modal */}
-      {selectedClient && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              <X size={24} />
-            </button>
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                {selectedClient.name}
-              </h3>
-              <p className="text-gray-700 leading-relaxed">
-                {selectedClient.description}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

@@ -12,38 +12,22 @@ interface PricingPlan {
   order_index: number;
 }
 
-interface CustomerReview {
-  id: string;
-  customer_name: string;
-  designation: string;
-  company_name: string;
-  review_text: string;
-  order_index: number;
-}
-
 const PricingSection = () => {
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
-  const [customerReviews, setCustomerReviews] = useState<CustomerReview[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPricingData = async () => {
       try {
-        const [plansResponse, reviewsResponse] = await Promise.all([
-          supabase.from('pricing_plans').select('*').order('order_index'),
-          supabase.from('customer_reviews').select('*').order('order_index')
-        ]);
+        const { data, error } = await supabase
+          .from('pricing_plans')
+          .select('*')
+          .order('order_index');
 
-        if (plansResponse.error) {
-          console.error('Error fetching pricing plans:', plansResponse.error);
-        } else if (plansResponse.data) {
-          setPricingPlans(plansResponse.data);
-        }
-
-        if (reviewsResponse.error) {
-          console.error('Error fetching customer reviews:', reviewsResponse.error);
-        } else if (reviewsResponse.data) {
-          setCustomerReviews(reviewsResponse.data);
+        if (error) {
+          console.error('Error fetching pricing plans:', error);
+        } else if (data) {
+          setPricingPlans(data);
         }
       } catch (error) {
         console.error('Error:', error);
@@ -57,26 +41,18 @@ const PricingSection = () => {
 
   if (loading) {
     return (
-      <section id="pricing" className="py-20 bg-gradient-to-b from-blue-50/30 to-transparent">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="animate-pulse">Loading...</div>
-        </div>
+      <section id="pricing" className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-pulse">Loading...</div>
       </section>
     );
   }
 
   return (
-    <section id="pricing" className="py-20 bg-gradient-to-b from-blue-50/30 to-transparent">
+    <section id="pricing" className="min-h-screen bg-white py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Pricing Plans */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Choose Your Plan
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Flexible pricing options designed to scale with your business
-          </p>
-        </div>
+        <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Choose Your Plan</h2>
+        <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {pricingPlans.map((plan, index) => (
@@ -129,52 +105,6 @@ const PricingSection = () => {
           <Button className="btn-primary-glass text-lg px-12 py-4">
             Contact Us
           </Button>
-        </div>
-
-        {/* Customer Reviews */}
-        <div className="text-center mb-16">
-          <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            What Our Clients Say
-          </h3>
-        </div>
-
-        <div className="relative overflow-hidden">
-          <div 
-            className="flex gap-8 animate-scroll-reviews"
-            style={{
-              width: `${customerReviews.length * 400}px`,
-              animation: 'scroll-reviews 20s linear infinite'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.animationPlayState = 'paused';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.animationPlayState = 'running';
-            }}
-          >
-            {[...customerReviews, ...customerReviews].map((review, index) => (
-              <div
-                key={`${review.id}-${index}`}
-                className="glass-card-hover p-6 min-w-[350px] flex-shrink-0 hover:scale-105 transition-transform duration-300"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                <p className="text-gray-700 mb-6 leading-relaxed italic">
-                  "{review.review_text}"
-                </p>
-                <div>
-                  <h4 className="font-bold text-gray-900 text-lg">
-                    {review.customer_name}
-                  </h4>
-                  <p className="text-gray-600">
-                    {review.designation}
-                  </p>
-                  <p className="text-gray-600">
-                    {review.company_name}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

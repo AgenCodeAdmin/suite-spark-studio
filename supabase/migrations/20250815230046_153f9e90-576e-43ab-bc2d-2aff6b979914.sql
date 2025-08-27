@@ -1,4 +1,4 @@
--- Create tables for dynamic website content
+p-- Create tables for dynamic website content
 
 -- Hero section content
 CREATE TABLE public.hero_content (

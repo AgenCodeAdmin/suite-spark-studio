@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import ServicePopup from '@/components/ServicePopup';
 
 interface Service {
   id: string;
   title: string;
   description: string;
   image_url: string;
+  popup_description: string;
+  popup_button_text: string;
+  popup_button_link: string;
   order_index: number;
 }
 
 const ServicesSection = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -38,26 +43,17 @@ const ServicesSection = () => {
 
   if (loading) {
     return (
-      <section id="services" className="py-20 bg-gradient-to-b from-transparent to-blue-50/30">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="animate-pulse">Loading...</div>
-        </div>
+      <section id="services" className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-pulse">Loading...</div>
       </section>
     );
   }
 
   return (
-    <section id="services" className="py-20 bg-gradient-to-b from-transparent to-blue-50/30">
+    <section id="services" className="min-h-screen bg-white py-20">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Our Services
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Comprehensive digital solutions tailored to your business needs
-          </p>
-        </div>
-
+        <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Our Services</h2>
+        <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
@@ -75,13 +71,25 @@ const ServicesSection = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 {service.title}
               </h3>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed mb-4">
                 {service.description}
               </p>
+              <button 
+                onClick={() => setSelectedService(service)}
+                className="text-blue-500 hover:underline font-semibold"
+              >
+                Learn more
+              </button>
             </div>
           ))}
         </div>
       </div>
+      {selectedService && (
+        <ServicePopup 
+          service={selectedService} 
+          onClose={() => setSelectedService(null)} 
+        />
+      )}
     </section>
   );
 };

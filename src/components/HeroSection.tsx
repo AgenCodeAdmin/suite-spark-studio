@@ -7,6 +7,7 @@ interface HeroContent {
   subheadline: string;
   background_image_url: string;
   cta_text: string;
+  cta_link: string;
 }
 
 const HeroSection = () => {
@@ -19,11 +20,13 @@ const HeroSection = () => {
         const { data, error } = await supabase
           .from('hero_content')
           .select('*')
+          .limit(1)
           .single();
 
         if (error && error.code !== 'PGRST116') {
           console.error('Error fetching hero content:', error);
         } else if (data) {
+          console.log('Hero content fetched:', data);
           setHeroContent(data);
         }
       } catch (error) {
@@ -44,14 +47,19 @@ const HeroSection = () => {
     );
   }
 
-  const defaultContent: HeroContent = {
-    headline: 'Transform Your Business with Digital Excellence',
-    subheadline: 'Comprehensive digital solutions for modern businesses',
-    background_image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80',
-    cta_text: 'Get Started Now'
-  };
+  
 
-  const content = heroContent || defaultContent;
+  if (!heroContent) {
+    return (
+      <section id="home" className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center text-gray-600">
+          <p>No Hero content found. Please add content from the Admin Dashboard.</p>
+        </div>
+      </section>
+    );
+  }
+
+  const content = heroContent;
 
   return (
     <section 
@@ -66,17 +74,19 @@ const HeroSection = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
       
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-        <div className="glass-card p-12 fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+      <div className="relative z-10 text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full lg:w-2/3 mx-auto">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight bounce-animation max-w-full break-words">
             {content.headline}
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 mx-auto rise-animation break-all px-4">
             {content.subheadline}
           </p>
-          <Button className="btn-primary-glass text-lg px-12 py-4 float">
-            {content.cta_text}
-          </Button>
+          <a href={content.cta_link} target="_blank" rel="noopener noreferrer">
+            <Button className="glow-on-hover text-black text-lg px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+              {content.cta_text}
+            </Button>
+          </a>
         </div>
       </div>
 

@@ -19,38 +19,25 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('username', username)
-        .single();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: username,
+        password: password,
+      });
 
-      if (error || !data) {
+      if (error) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password',
+          description: error.message,
           variant: 'destructive',
         });
         return;
       }
 
-      // For demo purposes, we'll do simple password comparison
-      // In production, you'd use proper password hashing
-      if (password === 'admin123') {
-        localStorage.setItem('adminLoggedIn', 'true');
-        localStorage.setItem('adminUser', JSON.stringify(data));
-        toast({
-          title: 'Login Successful',
-          description: 'Welcome to the admin dashboard!',
-        });
-        navigate('/admin/dashboard');
-      } else {
-        toast({
-          title: 'Login Failed',
-          description: 'Invalid username or password',
-          variant: 'destructive',
-        });
-      }
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome to the admin dashboard!',
+      });
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       toast({

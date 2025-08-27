@@ -23,6 +23,7 @@ const FooterSection = () => {
         const { data, error } = await supabase
           .from('footer_content')
           .select('*')
+          .limit(1)
           .single();
 
         if (error && error.code !== 'PGRST116') {
