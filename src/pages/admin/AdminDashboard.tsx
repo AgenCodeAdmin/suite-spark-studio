@@ -36,6 +36,7 @@ const AdminDashboard = () => {
   const [services, setServices] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [pricingPlans, setPricingPlans] = useState<any[]>([]);
+  const [contactUsLink, setContactUsLink] = useState<string>(''); // State for global contact us link
   const [customerReviews, setCustomerReviews] = useState<any[]>([]);
   const [footerContent, setFooterContent] = useState({
     id: null,
@@ -60,14 +61,15 @@ const AdminDashboard = () => {
   const fetchAllContent = async () => {
     try {
       // Fetch all content in parallel
-      const [heroRes, aboutRes, servicesRes, clientsRes, pricingRes, reviewsRes, footerRes] = await Promise.all([
+      const [heroRes, aboutRes, servicesRes, clientsRes, pricingRes, reviewsRes, footerRes, settingsRes] = await Promise.all([
         supabase.from('hero_content').select('*').limit(1).single(),
         supabase.from('about_content').select('*').single(),
         supabase.from('services').select('*').order('order_index'),
         supabase.from('clients').select('*').order('order_index'),
         supabase.from('pricing_plans').select('*').order('order_index'),
         supabase.from('customer_reviews').select('*').order('order_index'),
-        supabase.from('footer_content').select('*').limit(1).single()
+        supabase.from('footer_content').select('*').limit(1).single(),
+        supabase.from('website_settings').select('setting_value').eq('setting_name', 'contact_us_link').single()
       ]);
 
       if (heroRes.data) {
@@ -99,6 +101,9 @@ const AdminDashboard = () => {
           links: [],
           social_media: {},
         });
+      }
+      if (settingsRes.data) {
+        setContactUsLink(settingsRes.data.setting_value);
       }
     } catch (error) {
       console.error('Error fetching content:', error);
@@ -293,7 +298,8 @@ const AdminDashboard = () => {
       price: '',
       features: [],
       is_featured: false,
-      order_index: pricingPlans.length
+      order_index: pricingPlans.length,
+      choose_plan_link: '' // New field
     }]);
   };
 
@@ -324,7 +330,8 @@ const AdminDashboard = () => {
             price: plan.price,
             features: plan.features,
             is_featured: plan.is_featured,
-            order_index: index
+            order_index: index,
+            choose_plan_link: plan.choose_plan_link || null // Save the new field
           })));
 
         if (error) throw error;
@@ -449,6 +456,34 @@ const AdminDashboard = () => {
     }
   };
 
+  const saveGlobalSettings = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('website_settings')
+        .upsert(
+          { setting_name: 'contact_us_link', setting_value: contactUsLink },
+          { onConflict: 'setting_name' }
+        );
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: 'Global settings updated successfully',
+      });
+      fetchAllContent(); // Re-fetch all content to update the state
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update global settings',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen" style={{
       background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
@@ -477,6 +512,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="footer">Footer</TabsTrigger>
               <TabsTrigger value="accordion">Accordion Content</TabsTrigger>
+              <TabsTrigger value="global-settings">Global Settings</TabsTrigger>
             </TabsList>
 
             {/* Hero Content */}
@@ -746,6 +782,12 @@ const AdminDashboard = () => {
                         onChange={(e) => updatePricingPlan(index, 'price', e.target.value)}
                         className="glass-card"
                       />
+                      <Input
+                        placeholder="Choose Plan Link"
+                        value={plan.choose_plan_link}
+                        onChange={(e) => updatePricingPlan(index, 'choose_plan_link', e.target.value)}
+                        className="glass-card"
+                      />
                       <Textarea
                         placeholder="Features (one per line)"
                         value={plan.features.join('\n')}
@@ -954,6 +996,31 @@ const AdminDashboard = () => {
             {/* Accordion Content */}
             <TabsContent value="accordion">
               <AccordionCrud />
+            </TabsContent>
+
+            {/* Global Settings Content */}
+            <TabsContent value="global-settings">
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle>Global Settings</CardTitle>
+                  <CardDescription>Manage global website settings</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="contact-us-link">Contact Us Button Link</Label>
+                    <Input
+                      id="contact-us-link"
+                      value={contactUsLink}
+                      onChange={(e) => setContactUsLink(e.target.value)}
+                      className="glass-card"
+                    />
+                  </div>
+                  <Button onClick={saveGlobalSettings} disabled={loading} className="btn-primary-glass">
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Global Settings
+                  </Button>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </div>

@@ -10,25 +10,42 @@ interface PricingPlan {
   features: string[];
   is_featured: boolean;
   order_index: number;
+  choose_plan_link: string; // New field
 }
 
 const PricingSection = () => {
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
+  const [contactUsLink, setContactUsLink] = useState<string>('#'); // New state for contact us link
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPricingData = async () => {
       try {
-        const { data, error } = await supabase
+        // Fetch pricing plans
+        const { data: pricingData, error: pricingError } = await supabase
           .from('pricing_plans')
           .select('*')
           .order('order_index');
 
-        if (error) {
-          console.error('Error fetching pricing plans:', error);
-        } else if (data) {
-          setPricingPlans(data);
+        if (pricingError) {
+          console.error('Error fetching pricing plans:', pricingError);
+        } else if (pricingData) {
+          setPricingPlans(pricingData);
         }
+
+        // Fetch contact us link
+        const { data: settingsData, error: settingsError } = await supabase
+          .from('website_settings')
+          .select('setting_value')
+          .eq('setting_name', 'contact_us_link')
+          .single();
+
+        if (settingsError) {
+          console.error('Error fetching contact us link:', settingsError);
+        } else if (settingsData) {
+          setContactUsLink(settingsData.setting_value);
+        }
+
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -93,6 +110,7 @@ const PricingSection = () => {
                     ? 'btn-primary-glass' 
                     : 'bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50'
                 }`}
+                onClick={() => window.open(plan.choose_plan_link || '#', '_blank')}
               >
                 Choose Plan
               </Button>
@@ -102,7 +120,10 @@ const PricingSection = () => {
 
         {/* Contact Us Button */}
         <div className="text-center mb-20">
-          <Button className="btn-primary-glass text-lg px-12 py-4">
+          <Button 
+            className="btn-primary-glass text-lg px-12 py-4"
+            onClick={() => window.open(contactUsLink || '#', '_blank')}
+          >
             Contact Us
           </Button>
         </div>
