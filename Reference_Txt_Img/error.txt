@@ -1,2 +1,14 @@
-chunk-FJ2A54M7.js?v=a772ccf5:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
-2AdminDashboard.tsx:873 
+[plugin:vite:react-swc] × 'import', and 'export' cannot be used outside of module code
+      ╭─[C:/Users/horat/Documents/Anja_Agency/Agency_Website_01/src/pages/admin/AdminDashboard.tsx:1040:1]
+ 1037 │   </div>
+ 1038 │ );
+ 1039 │ 
+ 1040 │ export default AdminDashboard;
+      · ──────
+ 1041 │ 
+      ╰────
+
+
+Caused by:
+    Syntax Error
+C:/Users/horat/Documents/Anja_Agency/Agency_Website_01/src/pages/admin/AdminDashboard.tsx

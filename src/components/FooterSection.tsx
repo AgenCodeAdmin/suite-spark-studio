@@ -65,9 +65,9 @@ const FooterSection = () => {
 
   if (loading) {
     return (
-      <footer id="contact" className="py-20 bg-gradient-to-t from-gray-900 to-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="animate-pulse">Loading...</div>
+      <footer id="contact" className="py-20 bg-gradient-to-t from-gray-900 to-gray-800 flex items-center justify-center min-h-[200px]">
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
         </div>
       </footer>
     );
@@ -142,7 +142,7 @@ const FooterSection = () => {
 
         <div className="mt-12 pt-8 border-t border-gray-200 text-center">
           <p className="text-gray-600">
-            © 2024 {content.company_name}. All rights reserved.
+            © 2025 {content.company_name}. All rights reserved.
           </p>
         </div>
       </div>

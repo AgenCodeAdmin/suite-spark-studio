@@ -16,6 +16,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true); // New state for initial loading
 
   // State for all content types
   const [heroContent, setHeroContent] = useState({
@@ -107,6 +108,8 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error('Error fetching content:', error);
+    } finally {
+      setInitialLoading(false);
     }
   };
 
@@ -488,10 +491,15 @@ const AdminDashboard = () => {
     <div className="min-h-screen" style={{
       background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
     }}>
-      <div className="p-6">
+      {initialLoading ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+        </div>
+      ) : (
+      <div className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
             <div className="glass-card p-4">
               <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
               <p className="text-gray-600">Manage your website content</p>
@@ -503,7 +511,7 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="hero" className="space-y-6">
-            <TabsList className="glass-card p-2">
+            <TabsList className="glass-card p-2 sm:p-3 flex-wrap overflow-x-auto">
               <TabsTrigger value="hero">Hero Section</TabsTrigger>
               <TabsTrigger value="about">About</TabsTrigger>
               <TabsTrigger value="services">Services</TabsTrigger>
@@ -682,7 +690,7 @@ const AdminDashboard = () => {
                       />
                     </div>
                   ))}
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <Button onClick={addService} variant="outline" className="glass-card">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Service
@@ -736,7 +744,7 @@ const AdminDashboard = () => {
                       />
                     </div>
                   ))}
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <Button onClick={addClient} variant="outline" className="glass-card">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Client
@@ -806,7 +814,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   ))}
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <Button onClick={addPricingPlan} variant="outline" className="glass-card">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Plan
@@ -871,7 +879,7 @@ const AdminDashboard = () => {
                       </p>
                     </div>
                   ))}
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <Button onClick={addReview} variant="outline" className="glass-card">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Review
@@ -916,7 +924,7 @@ const AdminDashboard = () => {
                   <div>
                     <Label>Links</Label>
                     {footerContent.links.map((link, index) => (
-                      <div key={index} className="flex items-center space-x-2 mb-2">
+                      <div key={index} className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
                         <Input
                           placeholder="Link Text"
                           value={link.text}
@@ -1025,8 +1033,10 @@ const AdminDashboard = () => {
           </Tabs>
         </div>
       </div>
-    </div>
-  );
+    )}
+  </div>
+);
+
 };
 
 export default AdminDashboard;

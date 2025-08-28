@@ -23,7 +23,7 @@ const Navbar = () => {
     { label: 'Home', id: 'home' },
     { label: 'About', id: 'about' },
     { label: 'Services', id: 'services' },
-    { label: 'Our Clients', id: 'clients' },
+    { label: 'Why Choose Us', id: 'accordion' },
     { label: 'Pricing', id: 'pricing' },
     { label: 'Contact Us', id: 'footer' },
   ];
