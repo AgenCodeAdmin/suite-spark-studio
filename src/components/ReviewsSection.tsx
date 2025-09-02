@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import parse from 'html-react-parser';
 
 interface CustomerReview {
   id: string;
@@ -141,9 +142,9 @@ const ReviewsSection = () => {
                 key={`${review.id}-${index}`}
                 className="review-card glass-card-hover p-6 rounded-lg shadow-lg glow-on-hover"
               >
-                <p className="review-text text-gray-700 mb-6 leading-relaxed italic break-words whitespace-normal">
-                  "{review.review_text}"
-                </p>
+                <div className="review-text text-gray-700 mb-6 leading-relaxed italic break-words whitespace-normal tiptap-content">
+                  {parse(review.review_text)}
+                </div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg">
                     {review.customer_name}

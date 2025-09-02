@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
+import parse from 'html-react-parser';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 interface AccordionItem {
@@ -77,8 +78,8 @@ const AccordionSection = () => {
                     <AccordionTrigger className="text-2xl font-semibold text-gray-900 hover:no-underline text-left">
                       {item.heading}
                     </AccordionTrigger>
-                    <AccordionContent className="text-lg text-gray-700 leading-relaxed">
-                      {item.description}
+                    <AccordionContent className="text-lg text-gray-700 leading-relaxed pre-wrap">
+                      {parse(item.description)}
                       {/* Image for small screens */}
                       <div className="md:hidden mt-4">
                         {activeImage === item.image_url && (

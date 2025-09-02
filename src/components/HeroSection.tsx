@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import parse from 'html-react-parser';
 import { Button } from '@/components/ui/button';
 
 interface HeroContent {
@@ -78,12 +79,12 @@ const HeroSection = () => {
       
       <div className="relative z-10 text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full lg:w-2/3 mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight bounce-animation max-w-full break-words">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight bounce-animation max-w-full break-words">
             {content.headline}
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 mx-auto rise-animation break-all px-4">
-            {content.subheadline}
-          </p>
+          <div className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 mx-auto rise-animation break-word px-4 tiptap-content">
+            {parse(content.subheadline)}
+          </div>
           <a href={content.cta_link} target="_blank" rel="noopener noreferrer">
             <Button className="glow-on-hover text-black text-lg px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
               {content.cta_text}

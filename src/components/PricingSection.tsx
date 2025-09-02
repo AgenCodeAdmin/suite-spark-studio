@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import parse from 'html-react-parser';
 
 interface PricingPlan {
   id: string;
@@ -97,14 +98,9 @@ const PricingSection = () => {
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8 flex-grow">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center space-x-3">
-                    <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-4 mb-8 flex-grow tiptap-content">
+                {parse(plan.features.join(''))}
+              </div>
 
               <Button 
                 className={`w-full mt-auto transition-all duration-300 hover:scale-105 transform hover:shadow-lg ${

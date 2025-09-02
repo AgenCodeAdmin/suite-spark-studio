@@ -3,11 +3,16 @@ import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import ServicesSection from '@/components/ServicesSection';
+import PainPointsSection from '@/components/PainPointsSection'; // New import
+import ProgressSection from '@/components/ProgressSection'; // New import
 import ClientsSection from '@/components/ClientsSection';
 import PricingSection from '@/components/PricingSection';
-import ReviewsSection from '@/components/ReviewsSection'; // New import
+import ReviewsSection from '@/components/ReviewsSection';
+import ContactUsSection from '@/components/ContactUsSection'; // New import
+import FaqSection from '@/components/FaqSection'; // New import
 import FooterSection from '@/components/FooterSection';
 import AccordionSection from '@/components/AccordionSection';
+import LogoCarouselSection from '@/components/LogoCarouselSection';
 
 const LandingPage = () => {
   return (
@@ -17,11 +22,16 @@ const LandingPage = () => {
       </div>
       <HeroSection />
       <AboutSection />
+      <LogoCarouselSection />
+      <PainPointsSection /> {/* New section */}
+      <ProgressSection /> {/* New section */}
       <ServicesSection />
-      <AccordionSection /> {/* New Accordion Section */}
+      <AccordionSection />
       <ClientsSection />
       <PricingSection />
-      <ReviewsSection /> {/* New Reviews Section */}
+      <ReviewsSection />
+      <ContactUsSection /> {/* New section */}
+      <FaqSection /> {/* New section */}
       <FooterSection />
     </div>
   );

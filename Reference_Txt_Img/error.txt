@@ -1,14 +1,13 @@
 [plugin:vite:react-swc] × 'import', and 'export' cannot be used outside of module code
-      ╭─[C:/Users/horat/Documents/Anja_Agency/Agency_Website_01/src/pages/admin/AdminDashboard.tsx:1040:1]
- 1037 │   </div>
- 1038 │ );
- 1039 │ 
- 1040 │ export default AdminDashboard;
-      · ──────
- 1041 │ 
-      ╰────
+     ╭─[C:/Users/horat/Documents/Anja_Agency/Agency_Website_01/src/components/ContactUsSection.tsx:202:1]
+ 199 │     </>
+ 200 │   );
+ 201 │ 
+ 202 │ export default ContactUsSection;
+     · ──────
+     ╰────
 
 
 Caused by:
     Syntax Error
-C:/Users/horat/Documents/Anja_Agency/Agency_Website_01/src/pages/admin/AdminDashboard.tsx
+C:/Users/horat/Documents/Anja_Agency/Agency_Website_01/src/components/ContactUsSection.tsx

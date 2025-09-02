@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import parse from 'html-react-parser';
 
 interface AboutContent {
   title: string;
@@ -121,9 +122,9 @@ const AboutSection = () => {
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 {content.title}
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed break-words">
-                {content.description}
-              </p>
+              <div className="text-lg text-gray-700 leading-relaxed break-words tiptap-content">
+                {parse(content.description)}
+              </div>
             </div>
           </div>
         </div>

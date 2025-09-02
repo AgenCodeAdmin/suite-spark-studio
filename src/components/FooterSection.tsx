@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Instagram, Facebook, MessageCircle } from 'lucide-react';
+import parse from 'html-react-parser';
 
 interface FooterContent {
   company_name: string;
@@ -80,9 +81,9 @@ const FooterSection = () => {
           {/* Company Info */}
           <div className="text-center md:text-left">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">{content.company_name}</h3>
-            <p className="text-gray-600 leading-relaxed">
-              {content.company_address}
-            </p>
+            <div className="text-gray-600 leading-relaxed tiptap-content">
+              {parse(content.company_address)}
+            </div>
           </div>
 
           {/* Links */}

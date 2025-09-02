@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import ServicePopup from '@/components/ServicePopup';
+import parse from 'html-react-parser';
 
 interface Service {
   id: string;
@@ -73,9 +74,9 @@ const ServicesSection = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 {service.title}
               </h3>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                {service.description}
-              </p>
+              <div className="text-gray-700 leading-relaxed mb-4 tiptap-content">
+                {parse(service.description)}
+              </div>
               <button 
                 onClick={() => setSelectedService(service)}
                 className="text-blue-500 hover:underline font-semibold"

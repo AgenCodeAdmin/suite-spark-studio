@@ -25,7 +25,7 @@ const Navbar = () => {
     { label: 'Services', id: 'services' },
     { label: 'Why Choose Us', id: 'accordion' },
     { label: 'Pricing', id: 'pricing' },
-    { label: 'Contact Us', id: 'footer' },
+    { label: 'Contact Us', id: 'contact-us' },
   ];
 
   return (

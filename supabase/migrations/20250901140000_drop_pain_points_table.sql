@@ -1,0 +1,1 @@
+DROP TABLE pain_points;

@@ -251,6 +251,30 @@ export type Database = {
         }
         Relationships: []
       }
+      logo_carousel: {
+        Row: {
+          id: number
+          created_at: string
+          image_url: string
+          alt_text: string | null
+          display_order: number
+        }
+        Insert: {
+          id?: number
+          created_at?: string
+          image_url: string
+          alt_text?: string | null
+          display_order?: number
+        }
+        Update: {
+          id?: number
+          created_at?: string
+          image_url?: string
+          alt_text?: string | null
+          display_order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

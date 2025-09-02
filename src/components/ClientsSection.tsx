@@ -63,7 +63,7 @@ const ClientsSection = () => {
           .clients-scrolling-content {
             display: flex;
             flex-shrink: 0;
-            animation: clients-scroll 20s linear infinite; /* Faster animation */
+            animation: clients-scroll 20s linear infinite;
           }
 
           @keyframes clients-scroll {
@@ -90,7 +90,7 @@ const ClientsSection = () => {
           }
 
           .client-logo:hover img {
-            filter: grayscale(0%);
+          filter: grayscale(0%);
             transform: scale(1.1);
           }
         `}

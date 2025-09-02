@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
+import parse from 'html-react-parser';
 
 interface Service {
   id: string;
@@ -34,10 +35,8 @@ const ServicePopup: React.FC<ServicePopupProps> = ({ service, onClose }) => {
               className="w-auto h-full object-contain rounded-xl shadow-lg"
             />
           </div>
-          <div className="mt-20 text-gray-800 leading-relaxed text-base sm:text-lg" style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-            <p>
-              {service.popup_description}
-            </p>
+          <div className="mt-20 text-gray-800 leading-relaxed text-base sm:text-lg tiptap-content" style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            {parse(service.popup_description)}
           </div>
           <div className="mt-8 text-center">
             <a href={service.popup_button_link} target="_blank" rel="noopener noreferrer">

@@ -10,6 +10,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { LogOut, Save, Plus, Trash2 } from 'lucide-react';
 import AccordionCrud from '@/pages/admin/AccordionCrud'
+import LogoCarouselCrud from '@/pages/admin/LogoCarouselCrud'
+import PainPointsCrud from '@/pages/admin/PainPointsCrud'
+import ProgressStagesCrud from '@/pages/admin/ProgressStagesCrud'
+import ContactSubmissionsCrud from '@/pages/admin/ContactSubmissionsCrud'
+import FaqCrud from '@/pages/admin/FaqCrud'
 
 
 const AdminDashboard = () => {
@@ -520,8 +525,13 @@ const AdminDashboard = () => {
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="footer">Footer</TabsTrigger>
               <TabsTrigger value="accordion">Accordion Content</TabsTrigger>
-              <TabsTrigger value="global-settings">Global Settings</TabsTrigger>
-            </TabsList>
+              <TabsTrigger value="logo-carousel">Logo Carousel</TabsTrigger>
+              <TabsTrigger value="pain-points">Business Problems</TabsTrigger>
+                  <TabsTrigger value="progress-stages">Progress Stages</TabsTrigger>
+                  <TabsTrigger value="contact-submissions">Contact Submissions</TabsTrigger>
+                  <TabsTrigger value="faqs">FAQs</TabsTrigger>
+                  <TabsTrigger value="global-settings">Global Settings</TabsTrigger>
+                </TabsList>
 
             {/* Hero Content */}
             <TabsContent value="hero">
@@ -1004,6 +1014,31 @@ const AdminDashboard = () => {
             {/* Accordion Content */}
             <TabsContent value="accordion">
               <AccordionCrud />
+            </TabsContent>
+
+            {/* Logo Carousel Content */}
+            <TabsContent value="logo-carousel">
+              <LogoCarouselCrud />
+            </TabsContent>
+
+            {/* Business Problems Content */}
+            <TabsContent value="pain-points">
+              <PainPointsCrud />
+            </TabsContent>
+
+            {/* Progress Stages Content */}
+            <TabsContent value="progress-stages">
+              <ProgressStagesCrud />
+            </TabsContent>
+
+            {/* Contact Submissions Content */}
+            <TabsContent value="contact-submissions">
+              <ContactSubmissionsCrud />
+            </TabsContent>
+
+            {/* FAQs Content */}
+            <TabsContent value="faqs">
+              <FaqCrud />
             </TabsContent>
 
             {/* Global Settings Content */}
