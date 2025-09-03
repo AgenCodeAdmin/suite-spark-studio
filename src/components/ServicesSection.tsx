@@ -53,7 +53,33 @@ const ServicesSection = () => {
   }
 
   return (
-    <section id="services" className="min-h-screen bg-white py-20">
+    <section id="services" className="bg-white py-20">
+      <style>
+        {`
+          @keyframes shine {
+            0% {
+              background-position: 100%;
+            }
+            100% {
+              background-position: -100%;
+            }
+          }
+          .shiny-text {
+            background: linear-gradient(
+              120deg,
+              #3b82f6 30%,
+              #C4C4C4 90%,
+              #3b82f6 70%
+            );
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            animation: shine 4s linear infinite;
+          }
+        `}
+      </style>
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Our Services</h2>
         <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
@@ -61,7 +87,7 @@ const ServicesSection = () => {
           {services.map((service, index) => (
             <div
               key={service.id}
-              className="glass-card-hover p-6 group"
+              className="glass-card-hover p-6 group max-w-sm"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="mb-6">
@@ -79,7 +105,7 @@ const ServicesSection = () => {
               </div>
               <button 
                 onClick={() => setSelectedService(service)}
-                className="text-blue-500 hover:underline font-semibold"
+                className="hover:underline font-semibold shiny-text"
               >
                 Learn more
               </button>

@@ -106,7 +106,7 @@ const AboutSection = () => {
           }
         `}
       </style>
-      <section id="about" ref={sectionRef} className="min-h-screen bg-white py-20">
+      <section id="about" ref={sectionRef} className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">About Us</h2>
           <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div>
@@ -119,10 +119,10 @@ const AboutSection = () => {
               />
             </div>
             <div className={`lg:col-span-3 order-2 space-y-6 ${isVisible ? 'text-rise-animation' : 'opacity-0'}`}>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 {content.title}
               </h2>
-              <div className="text-lg text-gray-700 leading-relaxed break-words tiptap-content">
+              <div className="text-lg text-gray-700 leading-relaxed break-words tiptap-content whitespace-pre-wrap">
                 {parse(content.description)}
               </div>
             </div>

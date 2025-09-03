@@ -58,7 +58,7 @@ const LogoCarouselSection = () => {
             overflow: hidden;
             width: 100%;
             -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
-            mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
           }
 
           .logo-scrolling-content-rtl {
@@ -98,7 +98,7 @@ const LogoCarouselSection = () => {
           }
 
           .logo-item img {
-            height: 80px;
+            height: 50px;
             width: auto;
             object-fit: contain;
             transition: filter 0.3s ease;
@@ -109,7 +109,7 @@ const LogoCarouselSection = () => {
           }
         `}
       </style>
-      <section className="bg-white py-20">
+      <section className="bg-white py-50">
         <div className="container mx-auto">
           {/* <h2 className="text-3xl font-bold text-center mb-12">Our Technology Partners</h2> */}
           <div className="flex flex-col gap-8">

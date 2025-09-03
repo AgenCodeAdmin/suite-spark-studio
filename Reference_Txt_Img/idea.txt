@@ -1,3 +1,7 @@
+Idea 1: multi glow effect
+
+$$$
+
 html,
 body {
     margin: 0;
@@ -70,3 +74,85 @@ body {
     50% { background-position: 400% 0; }
     100% { background-position: 0 0; }
 }
+
+
+$$$
+
+Idea 2: Line border shine animation
+
+$$$
+
+
+<div class="box">{children}</div>
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  height: 400px;
+  width: 400px;
+  border: 3px solid #0000;
+  border-radius: 12px;
+  background: linear-gradient(#131219, #131219) padding-box, linear-gradient(
+        var(--angle),
+        #070707,
+        #687aff
+      ) border-box;
+  animation: 8s rotate linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+
+
+
+$$$
+
+Idea 3 : Shiny text animation
+
+
+$$$
+
+
+.shiny-text {
+  color: #b5b5b5a4; /* Adjust this color to change intensity/style */
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: inline-block;
+  animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
+}
+
+.shiny-text.disabled {
+  animation: none;
+}
+
+
+
+$$$

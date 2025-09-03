@@ -78,8 +78,8 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
       
       <div className="relative z-10 text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full lg:w-2/3 mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight bounce-animation max-w-full break-words">
+        <div className="w-full lg:w-3/3 mx-auto">
+          <h1 className="text-3xl md:text-6xl font-bold text-white mb-8 leading-tight bounce-animation max-w-full break-words">
             {content.headline}
           </h1>
           <div className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 mx-auto rise-animation break-word px-4 tiptap-content">

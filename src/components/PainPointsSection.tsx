@@ -58,17 +58,42 @@ const PainPointsSection = () => {
   // Function to get Lucide icon component by name
   const getIconComponent = (iconName: string) => {
     const IconComponent = (LucideIcons as any)[iconName];
-    return IconComponent ? <IconComponent className="h-8 w-8 text-primary mb-4" /> : null;
+    return IconComponent ? <IconComponent className="h-14 w-28 text-primary mb-2" /> : null;
   };
 
   return (
-    <section className="bg-white py-20">
+    <section className="bg-white py-10">
       <div className="container mx-auto px-4">
         <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Common Business Challenges</h2>
         <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <style>
+          {`
+            @keyframes rotate {
+              to {
+                --angle: 360deg;
+              }
+            }
+
+            @property --angle {
+              syntax: "<angle>";
+              initial-value: 0deg;
+              inherits: false;
+            }
+
+            .animated-border-box {
+              --angle: 0deg;
+              border: 2px solid transparent;
+              background:
+                linear-gradient(white, white) padding-box,
+                linear-gradient(var(--angle), transparent, #ffb3b3, transparent) border-box;
+              animation: 8s rotate linear infinite;
+              border-radius: 0.75rem; /* 20px */
+            }
+          `}
+        </style>
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {painPoints.map((pp) => (
-            <Card key={pp.id} className="glass-card p-6 flex flex-col items-center text-center">
+            <Card key={pp.id} className="animated-border-box flex flex-col items-center text-center">
               {getIconComponent(pp.icon)}
               <CardHeader>
                 <CardTitle className="text-xl font-semibold mb-2">{pp.title}</CardTitle>

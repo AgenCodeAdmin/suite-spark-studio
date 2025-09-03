@@ -547,11 +547,11 @@ const AdminDashboard = () => {
                       id="headline"
                       value={heroContent.headline}
                       onChange={(e) => setHeroContent({...heroContent, headline: e.target.value})}
-                      maxLength={25}
+                      maxLength={100}
                       className="glass-card"
                     />
                     <p className="text-sm text-gray-500 text-right">
-                      {heroContent.headline.length}/25
+                      {heroContent.headline.length}/100
                     </p>
                   </div>
                   <div>

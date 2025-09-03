@@ -24,14 +24,14 @@ const LandingPage = () => {
       <AboutSection />
       <LogoCarouselSection />
       <PainPointsSection /> {/* New section */}
-      <ProgressSection /> {/* New section */}
       <ServicesSection />
       <AccordionSection />
-      <ClientsSection />
-      <PricingSection />
-      <ReviewsSection />
-      <ContactUsSection /> {/* New section */}
+      <ProgressSection /> {/* New section */}
       <FaqSection /> {/* New section */}
+      {/* <ClientsSection /> */}
+      {/* <PricingSection />  */}
+      {/* <ReviewsSection /> */}
+      <ContactUsSection /> {/* New section */}
       <FooterSection />
     </div>
   );

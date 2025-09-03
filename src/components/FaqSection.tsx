@@ -61,7 +61,8 @@ const FaqSection = () => {
   return (
     <section className="py-12 bg-white" id="faq">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+        <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Frequently Asked Questions</h2>
+        <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
         <div className="md:columns-2 md:gap-6">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq) => (

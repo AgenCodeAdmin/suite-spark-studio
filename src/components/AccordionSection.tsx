@@ -63,7 +63,7 @@ const AccordionSection = () => {
   };
 
   return (
-    <section id="accordion" className="min-h-screen bg-white py-20">
+    <section id="accordion" className="bg-white py-20">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Our Approach</h2>
         <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div>
@@ -103,7 +103,7 @@ const AccordionSection = () => {
                   <img 
                     src={activeImage}
                     alt="Our Approach"
-                    className="w-full h-80 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300 duration-500 ease-in-out"
+                    className="w-full h-80 object-contain rounded-xl group-hover:scale-105 transition-transform duration-300 duration-500 ease-in-out"
                   />
                 ) : (
                   <div className="w-[400px] h-[400px] flex items-center justify-center bg-gray-100 rounded-xl">
