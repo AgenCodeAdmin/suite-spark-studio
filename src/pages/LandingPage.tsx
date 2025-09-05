@@ -29,7 +29,7 @@ const LandingPage = () => {
       <ProgressSection /> {/* New section */}
       <FaqSection /> {/* New section */}
       {/* <ClientsSection /> */}
-      {/* <PricingSection />  */}
+      <PricingSection /> 
       {/* <ReviewsSection /> */}
       <ContactUsSection /> {/* New section */}
       <FooterSection />

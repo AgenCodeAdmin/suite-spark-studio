@@ -15,6 +15,7 @@ import PainPointsCrud from '@/pages/admin/PainPointsCrud'
 import ProgressStagesCrud from '@/pages/admin/ProgressStagesCrud'
 import ContactSubmissionsCrud from '@/pages/admin/ContactSubmissionsCrud'
 import FaqCrud from '@/pages/admin/FaqCrud'
+import RichTextEditor from '@/components/ui/RichTextEditor';
 
 
 const AdminDashboard = () => {
@@ -304,10 +305,11 @@ const AdminDashboard = () => {
     setPricingPlans([...pricingPlans, {
       name: '',
       price: '',
-      features: [],
+      description: '',
+      icon: '',
       is_featured: false,
       order_index: pricingPlans.length,
-      choose_plan_link: '' // New field
+      choose_plan_link: ''
     }]);
   };
 
@@ -336,10 +338,11 @@ const AdminDashboard = () => {
           .insert(plansToSave.map((plan, index) => ({
             name: plan.name,
             price: plan.price,
-            features: plan.features,
+            description: plan.description,
+            icon: plan.icon,
             is_featured: plan.is_featured,
             order_index: index,
-            choose_plan_link: plan.choose_plan_link || null // Save the new field
+            choose_plan_link: plan.choose_plan_link || null
           })));
 
         if (error) throw error;
@@ -801,17 +804,20 @@ const AdminDashboard = () => {
                         className="glass-card"
                       />
                       <Input
+                        placeholder="Icon (e.g., 'Check', 'Star', from lucide-react)"
+                        value={plan.icon || ''}
+                        onChange={(e) => updatePricingPlan(index, 'icon', e.target.value)}
+                        className="glass-card"
+                      />
+                      <Input
                         placeholder="Choose Plan Link"
                         value={plan.choose_plan_link}
                         onChange={(e) => updatePricingPlan(index, 'choose_plan_link', e.target.value)}
                         className="glass-card"
                       />
-                      <Textarea
-                        placeholder="Features (one per line)"
-                        value={plan.features.join('\n')}
-                        onChange={(e) => updatePricingPlan(index, 'features', e.target.value.split('\n').filter(f => f.trim()))}
-                        className="glass-card"
-                        rows={4}
+                      <RichTextEditor
+                        description={plan.description || ''}
+                        onChange={(html) => updatePricingPlan(index, 'description', html)}
                       />
                       <div className="flex items-center space-x-2">
                         <input

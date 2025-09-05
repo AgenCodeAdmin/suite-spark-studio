@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import parse from 'html-react-parser';
 import { Button } from '@/components/ui/button';
+import LightRays from '@/components/ui/light-rays';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeroContent {
   headline: string;
@@ -12,6 +14,7 @@ interface HeroContent {
 }
 
 const HeroSection = () => {
+  const isMobile = useIsMobile();
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -67,16 +70,23 @@ const HeroSection = () => {
   return (
     <section 
       id="home" 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${content.background_image_url})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-900"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
-      
+      <LightRays
+        raysOrigin="top-left"
+        raysColor="#ffffff"
+        raysSpeed={2}
+        lightSpread={isMobile ? 120 : 100}
+        rayLength={isMobile ? 24.0 : 5}
+        saturation={isMobile ? 4.0 : 4.0}
+        fadeDistance={isMobile ? 10.0 : 10.0}
+        followMouse={true}
+        mouseInfluence={1.5}
+        noiseAmount={0.0}
+        distortion={15}
+        className="absolute top-0 left-0 w-full h-full"
+      />
+
       <div className="relative z-10 text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full lg:w-3/3 mx-auto">
           <h1 className="text-3xl md:text-6xl font-bold text-white mb-8 leading-tight bounce-animation max-w-full break-words">
@@ -92,10 +102,6 @@ const HeroSection = () => {
           </a>
         </div>
       </div>
-
-      {/* Floating elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
     </section>
   );
 };

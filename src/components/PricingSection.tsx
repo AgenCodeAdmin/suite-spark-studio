@@ -1,28 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import * as icons from 'lucide-react';
 import parse from 'html-react-parser';
+
+// Define the type for the props of the DynamicIcon component
+interface DynamicIconProps extends icons.LucideProps {
+  name: keyof typeof icons;
+}
+
+// DynamicIcon component to render Lucide icons by name
+const DynamicIcon: React.FC<DynamicIconProps> = ({ name, ...props }) => {
+  const IconComponent = icons[name];
+
+  if (!IconComponent) {
+    // Return a default icon or null if the icon name is not found
+    return <icons.HelpCircle {...props} />;
+  }
+
+  return <IconComponent {...props} />;
+};
 
 interface PricingPlan {
   id: string;
   name: string;
   price: string;
-  features: string[];
+  description: string;
+  icon: string;
   is_featured: boolean;
   order_index: number;
-  choose_plan_link: string; // New field
+  choose_plan_link: string;
 }
 
 const PricingSection = () => {
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
-  const [contactUsLink, setContactUsLink] = useState<string>('#'); // New state for contact us link
+  const [contactUsLink, setContactUsLink] = useState<string>('#');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPricingData = async () => {
       try {
-        // Fetch pricing plans
         const { data: pricingData, error: pricingError } = await supabase
           .from('pricing_plans')
           .select('*')
@@ -34,7 +51,6 @@ const PricingSection = () => {
           setPricingPlans(pricingData);
         }
 
-        // Fetch contact us link
         const { data: settingsData, error: settingsError } = await supabase
           .from('website_settings')
           .select('setting_value')
@@ -70,9 +86,8 @@ const PricingSection = () => {
   return (
     <section id="pricing" className="min-h-screen bg-white py-20">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Pricing Plans */}
-        <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Choose Your Plan</h2>
-        <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
+        <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Pricing Designed for Your Success</h2>
+        <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {pricingPlans.map((plan, index) => (
@@ -88,8 +103,17 @@ const PricingSection = () => {
                   Most Popular
                 </div>
               )}
+
+              <div className="absolute top-4 left-4">
+                <div className="flex items-center justify-center w-10 h-10 border-2 border-blue-500 rounded-full">
+                  <span className="text-blue-500 font-bold text-lg">{plan.order_index + 1}</span>
+                </div>
+              </div>
               
-              <div className="text-center mb-8">
+              <div className="text-center mb-8 pt-12">
+                <div className="flex justify-center mb-4">
+                  <DynamicIcon name={plan.icon as keyof typeof icons} size={48} className="text-blue-600" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   {plan.name}
                 </h3>
@@ -98,11 +122,11 @@ const PricingSection = () => {
                 </div>
               </div>
 
-              <div className="space-y-4 mb-8 flex-grow tiptap-content">
-                {parse(plan.features.join(''))}
+              <div className="space-y-2 mb-8 flex-grow tiptap-content whitespace-pre-wrap leading-snug">
+                {parse(plan.description || '')}
               </div>
 
-              <Button 
+              {/* <Button 
                 className={`w-full mt-auto transition-all duration-300 hover:scale-105 transform hover:shadow-lg ${
                   plan.is_featured 
                     ? 'btn-primary-glass' 
@@ -111,12 +135,11 @@ const PricingSection = () => {
                 onClick={() => window.open(plan.choose_plan_link || '#', '_blank')}
               >
                 Choose Plan
-              </Button>
+              </Button> */}
             </div>
           ))}
         </div>
 
-        {/* Contact Us Button */}
         <div className="text-center mb-20">
           <Button 
             className="btn-primary-glass text-lg px-12 py-4"

@@ -86,7 +86,7 @@ const AccordionSection = () => {
                           <img 
                             src={item.image_url}
                             alt={item.heading}
-                            className="w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain rounded-xl shadow-lg image-zoom-hover"
                           />
                         )}
                       </div>
@@ -103,7 +103,7 @@ const AccordionSection = () => {
                   <img 
                     src={activeImage}
                     alt="Our Approach"
-                    className="w-full h-80 object-contain rounded-xl group-hover:scale-105 transition-transform duration-300 duration-500 ease-in-out"
+                    className="w-full h-full object-contain rounded-xl shadow-lg image-zoom-hover"
                   />
                 ) : (
                   <div className="w-[400px] h-[400px] flex items-center justify-center bg-gray-100 rounded-xl">
