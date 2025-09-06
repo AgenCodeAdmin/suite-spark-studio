@@ -83,11 +83,11 @@ const ServicesSection = () => {
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Our Services</h2>
         <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div> {/* Blue underline */}
-        <div className="grid md:grid-cols-2 lg:grid-cols2 gap-8">
+        <div className="flex flex-wrap justify-center gap-8">
           {services.map((service, index) => (
             <div
               key={service.id}
-              className="glass-card-hover p-6 group max-w-sm"
+              className="glass-card-hover p-6 group lg:basis-[42%]"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="mb-6">
