@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import ServicePopup from '@/components/ServicePopup';
 import parse from 'html-react-parser';
+import { Link } from 'react-router-dom';
 
+// The service type is now simplified as popup fields are no longer needed here.
 interface Service {
   id: string;
   title: string;
+  slug: string;
   description: string;
   image_url: string;
-  popup_description: string;
-  popup_button_text: string;
-  popup_button_link: string;
   order_index: number;
 }
 
 const ServicesSection = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const { data, error } = await supabase
           .from('services')
-          .select('*')
+          .select('id, title, slug, description, image_url, order_index') // Select only needed columns
           .order('order_index');
 
         if (error) {
@@ -103,22 +101,17 @@ const ServicesSection = () => {
               <div className="text-gray-700 leading-relaxed mb-4 tiptap-content">
                 {parse(service.description)}
               </div>
-              <button 
-                onClick={() => setSelectedService(service)}
+              <Link 
+                to={`/service/${service.slug}`}
                 className="hover:underline font-semibold shiny-text"
               >
                 Learn more
-              </button>
+              </Link>
             </div>
           ))}
         </div>
       </div>
-      {selectedService && (
-        <ServicePopup 
-          service={selectedService} 
-          onClose={() => setSelectedService(null)} 
-        />
-      )}
+      {/* The ServicePopup and related state have been removed */}
     </section>
   );
 };

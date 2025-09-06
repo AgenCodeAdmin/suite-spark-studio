@@ -133,6 +133,39 @@ const AccordionCrud = () => {
 
   return (
     <div className="container mx-auto p-4">
+
+      <h2 className="text-2xl font-bold mb-4">Existing Accordion Content</h2>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Heading</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Image URL</TableHead>
+            <TableHead>Order</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {accordionItems?.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.heading}</TableCell>
+              <TableCell>{item.description.substring(0, 50)}...</TableCell>
+              <TableCell><img src={item.image_url} alt="" className="w-16 h-16 object-cover" /></TableCell>
+              <TableCell>{item.order_index}</TableCell>
+              <TableCell>
+                <Button variant="outline" size="sm" onClick={() => setEditingItem(item)}>
+                  Edit
+                </Button>
+                <Button variant="destructive" size="sm" onClick={() => deleteMutation.mutate(item.id)} className="ml-2">
+                  Delete
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+
       <h2 className="text-2xl font-bold mb-4">Manage Accordion Content</h2>
 
       <Form {...form}>
@@ -203,35 +236,7 @@ const AccordionCrud = () => {
         </form>
       </Form>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Heading</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Image URL</TableHead>
-            <TableHead>Order</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {accordionItems?.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.heading}</TableCell>
-              <TableCell>{item.description.substring(0, 50)}...</TableCell>
-              <TableCell><img src={item.image_url} alt="" className="w-16 h-16 object-cover" /></TableCell>
-              <TableCell>{item.order_index}</TableCell>
-              <TableCell>
-                <Button variant="outline" size="sm" onClick={() => setEditingItem(item)}>
-                  Edit
-                </Button>
-                <Button variant="destructive" size="sm" onClick={() => deleteMutation.mutate(item.id)} className="ml-2">
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      
     </div>
   );
 };

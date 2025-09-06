@@ -256,7 +256,7 @@ Competitive Benchmarking" {...field} rows={5} />
       <Table>
         <TableHeader>
           <TableRow>
-            <TableCell>ID</TableCell>
+            {/* <TableCell>ID</TableCell> */}
             <TableCell>Order</TableCell>
             <TableCell>Title</TableCell>
             <TableCell>Description</TableCell>
@@ -266,7 +266,7 @@ Competitive Benchmarking" {...field} rows={5} />
         <TableBody>
           {progressStages.map((stage, index) => (
             <TableRow key={stage.id}>
-              <TableCell>{stage.id}</TableCell>
+              {/* <TableCell>{stage.id}</TableCell> */}
               <TableCell>{stage.order_index}</TableCell>
               <TableCell>{stage.title}</TableCell>
               <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">{stage.description}</TableCell>

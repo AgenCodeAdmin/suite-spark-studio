@@ -84,7 +84,7 @@ const PricingSection = () => {
   }
 
   return (
-    <section id="pricing" className="min-h-screen bg-white py-20">
+    <section id="pricing" className="bg-white py-20">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-5xl font-bold text-gray-900 text-center mb-4">Pricing Designed for Your Success</h2>
         <div className="w-24 h-1 bg-blue-500 mx-auto mb-12 rounded-full"></div>

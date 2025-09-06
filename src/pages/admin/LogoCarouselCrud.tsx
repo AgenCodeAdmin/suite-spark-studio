@@ -264,7 +264,7 @@ const LogoCarouselCrud: React.FC = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableCell>ID</TableCell>
+            {/* <TableCell>ID</TableCell> */}
             <TableCell>Order</TableCell> {/* New column for order */}
             <TableCell>Image</TableCell>
             <TableCell>Alt Text</TableCell>
@@ -274,7 +274,7 @@ const LogoCarouselCrud: React.FC = () => {
         <TableBody>
           {logos.map((logo, index) => (
             <TableRow key={logo.id}>
-              <TableCell>{logo.id}</TableCell>
+              {/* <TableCell>{logo.id}</TableCell> */}
               <TableCell>{logo.order_index}</TableCell> {/* Display order_index */}
               <TableCell>
                 <img src={logo.image_url} alt={logo.alt_text} className="h-12 w-auto object-contain" />

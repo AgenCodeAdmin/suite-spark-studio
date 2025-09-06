@@ -255,7 +255,7 @@ const FaqCrud: React.FC = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableCell>ID</TableCell>
+            {/* <TableCell>ID</TableCell> */}
             <TableCell>Order</TableCell>
             <TableCell>Question</TableCell>
             <TableCell>Answer</TableCell>
@@ -265,7 +265,7 @@ const FaqCrud: React.FC = () => {
         <TableBody>
           {faqs.map((faq, index) => (
             <TableRow key={faq.id}>
-              <TableCell>{faq.id}</TableCell>
+              {/* <TableCell>{faq.id}</TableCell> */}
               <TableCell>{faq.order_index}</TableCell>
               <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">{faq.question}</TableCell>
               <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">{faq.answer}</TableCell>

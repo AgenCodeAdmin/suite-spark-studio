@@ -270,7 +270,7 @@ const PainPointsCrud: React.FC = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableCell>ID</TableCell>
+            {/* <TableCell>ID</TableCell> */}
             <TableCell>Order</TableCell>
             <TableCell>Icon</TableCell>
             <TableCell>Title</TableCell>
@@ -281,7 +281,7 @@ const PainPointsCrud: React.FC = () => {
         <TableBody>
           {painPoints.map((pp, index) => (
             <TableRow key={pp.id}>
-              <TableCell>{pp.id}</TableCell>
+              {/* <TableCell>{pp.id}</TableCell> */}
               <TableCell>{pp.order_index}</TableCell>
               <TableCell>{pp.icon}</TableCell>
               <TableCell>{pp.title}</TableCell>
