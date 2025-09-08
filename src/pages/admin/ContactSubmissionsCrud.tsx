@@ -179,12 +179,12 @@ const ContactSubmissionsCrud: React.FC = () => {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manage Contact Submissions</h2>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <Input
           placeholder="Search submissions..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
+          className="w-full md:max-w-sm"
         />
         <DateRangePicker date={dateRange} onDateChange={setDateRange} />
       </div>
