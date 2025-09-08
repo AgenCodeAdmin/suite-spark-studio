@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
-import { LogOut, Menu } from 'lucide-react';
+import { LogOut, Menu, ChevronRight } from 'lucide-react';
 import AccordionCrud from '@/pages/admin/AccordionCrud';
 import LogoCarouselCrud from '@/pages/admin/LogoCarouselCrud';
 import PainPointsCrud from '@/pages/admin/PainPointsCrud';
@@ -19,10 +19,12 @@ import ReviewsCrud from '@/pages/admin/ReviewsCrud';
 import FooterCrud from '@/pages/admin/FooterCrud';
 import GlobalSettingsCrud from '@/pages/admin/GlobalSettingsCrud';
 import { cn } from '@/lib/utils';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isContentManagementOpen, setIsContentManagementOpen] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -60,51 +62,59 @@ const AdminDashboard = () => {
             </Button>
           </div>
 
-          <Tabs defaultValue="contact-submissions" className="flex flex-col sm:flex-row gap-6">
-            <div className={cn("transition-all duration-300 ease-in-out", isSidebarOpen ? "w-full sm:w-64" : "w-0")}>
-                <TabsList className={cn(
-                    "glass-card flex-col h-full space-y-1 w-full bg-transparent",
-                    isSidebarOpen ? "p-2" : "p-0 overflow-hidden border-none"
-                )}>
-                  <TabsTrigger value="contact-submissions" className="w-full justify-start">
-                    Contact Submissions
-                  </TabsTrigger>
-                  
-                  <div className="pt-4 w-full">
-                    <h3 className="px-4 py-2 text-sm font-semibold text-muted-foreground">Content Management</h3>
-                    <div className="space-y-1">
-                      <TabsTrigger value="hero" className="w-full justify-start">Hero Section</TabsTrigger>
-                      <TabsTrigger value="about" className="w-full justify-start">About</TabsTrigger>
-                      <TabsTrigger value="services" className="w-full justify-start">Services</TabsTrigger>
-                      <TabsTrigger value="clients" className="w-full justify-start">Clients</TabsTrigger>
-                      <TabsTrigger value="pricing" className="w-full justify-start">Pricing</TabsTrigger>
-                      <TabsTrigger value="reviews" className="w-full justify-start">Reviews</TabsTrigger>
-                      <TabsTrigger value="footer" className="w-full justify-start">Footer</TabsTrigger>
-                      <TabsTrigger value="accordion" className="w-full justify-start">Accordion Content</TabsTrigger>
-                      <TabsTrigger value="logo-carousel" className="w-full justify-start">Logo Carousel</TabsTrigger>
-                      <TabsTrigger value="pain-points" className="w-full justify-start">Business Problems</TabsTrigger>
-                      <TabsTrigger value="progress-stages" className="w-full justify-start">Progress Stages</TabsTrigger>
-                      <TabsTrigger value="faqs" className="w-full justify-start">FAQs</TabsTrigger>
-                      <TabsTrigger value="global-settings" className="w-full justify-start">Global Settings</TabsTrigger>
-                    </div>
-                  </div>
-                </TabsList>
-            </div>
-            <div className="flex-grow">
-              <TabsContent value="hero"><HeroCrud /></TabsContent>
-              <TabsContent value="about"><AboutCrud /></TabsContent>
-              <TabsContent value="services"><ServiceCrud /></TabsContent>
-              <TabsContent value="clients"><ClientsCrud /></TabsContent>
-              <TabsContent value="pricing"><PricingCrud /></TabsContent>
-              <TabsContent value="reviews"><ReviewsCrud /></TabsContent>
-              <TabsContent value="footer"><FooterCrud /></TabsContent>
-              <TabsContent value="accordion"><AccordionCrud /></TabsContent>
-              <TabsContent value="logo-carousel"><LogoCarouselCrud /></TabsContent>
-              <TabsContent value="pain-points"><PainPointsCrud /></TabsContent>
-              <TabsContent value="progress-stages"><ProgressStagesCrud /></TabsContent>
-              <TabsContent value="contact-submissions"><ContactSubmissionsCrud /></TabsContent>
-              <TabsContent value="faqs"><FaqCrud /></TabsContent>
-              <TabsContent value="global-settings"><GlobalSettingsCrud /></TabsContent>
+          <Tabs defaultValue="contact-submissions">
+            <div className="flex flex-col sm:flex-row gap-6 sm:items-start">
+              <div className={cn(
+                  "transition-all duration-300 ease-in-out shrink-0",
+                  isSidebarOpen ? "w-full sm:w-64" : "w-0"
+              )}>
+                  <TabsList className={cn(
+                      "glass-card flex-col space-y-1 w-full",
+                      isSidebarOpen ? "p-2" : "p-0 overflow-hidden border-none"
+                  )}>
+                    <TabsTrigger value="contact-submissions" className="w-full justify-start text-base font-bold">
+                      Contact Submissions
+                    </TabsTrigger>
+                    
+                    <Collapsible open={isContentManagementOpen} onOpenChange={setIsContentManagementOpen} className="w-full space-y-1">
+                      <CollapsibleTrigger className="flex items-center justify-between w-full p-2 text-base font-bold hover:bg-muted rounded-md">
+                          <span>Content Management</span>
+                          <ChevronRight className={cn("h-5 w-5 transition-transform", isContentManagementOpen && "rotate-90")} />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="space-y-1 pl-4">
+                        <TabsTrigger value="hero" className="w-full justify-start">Hero Section</TabsTrigger>
+                        <TabsTrigger value="about" className="w-full justify-start">About</TabsTrigger>
+                        <TabsTrigger value="services" className="w-full justify-start">Services</TabsTrigger>
+                        <TabsTrigger value="clients" className="w-full justify-start">Clients</TabsTrigger>
+                        <TabsTrigger value="pricing" className="w-full justify-start">Pricing</TabsTrigger>
+                        <TabsTrigger value="reviews" className="w-full justify-start">Reviews</TabsTrigger>
+                        <TabsTrigger value="footer" className="w-full justify-start">Footer</TabsTrigger>
+                        <TabsTrigger value="accordion" className="w-full justify-start">Accordion Content</TabsTrigger>
+                        <TabsTrigger value="logo-carousel" className="w-full justify-start">Logo Carousel</TabsTrigger>
+                        <TabsTrigger value="pain-points" className="w-full justify-start">Business Problems</TabsTrigger>
+                        <TabsTrigger value="progress-stages" className="w-full justify-start">Progress Stages</TabsTrigger>
+                        <TabsTrigger value="faqs" className="w-full justify-start">FAQs</TabsTrigger>
+                        <TabsTrigger value="global-settings" className="w-full justify-start">Global Settings</TabsTrigger>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </TabsList>
+              </div>
+              <div className="flex-grow">
+                <TabsContent value="hero"><HeroCrud /></TabsContent>
+                <TabsContent value="about"><AboutCrud /></TabsContent>
+                <TabsContent value="services"><ServiceCrud /></TabsContent>
+                <TabsContent value="clients"><ClientsCrud /></TabsContent>
+                <TabsContent value="pricing"><PricingCrud /></TabsContent>
+                <TabsContent value="reviews"><ReviewsCrud /></TabsContent>
+                <TabsContent value="footer"><FooterCrud /></TabsContent>
+                <TabsContent value="accordion"><AccordionCrud /></TabsContent>
+                <TabsContent value="logo-carousel"><LogoCarouselCrud /></TabsContent>
+                <TabsContent value="pain-points"><PainPointsCrud /></TabsContent>
+                <TabsContent value="progress-stages"><ProgressStagesCrud /></TabsContent>
+                <TabsContent value="contact-submissions"><ContactSubmissionsCrud /></TabsContent>
+                <TabsContent value="faqs"><FaqCrud /></TabsContent>
+                <TabsContent value="global-settings"><GlobalSettingsCrud /></TabsContent>
+              </div>
             </div>
           </Tabs>
         </div>
