@@ -47,7 +47,14 @@ const ContactUsSection: React.FC = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    const { error } = await supabase.from('contact_submissions').insert(values);
+    
+    const { error } = await supabase.rpc('handle_contact_form', {
+      p_full_name: values.full_name,
+      p_email: values.email,
+      p_phone_number: values.phone_number,
+      p_business_name: values.business_name,
+      p_message: values.message,
+    });
 
     if (error) {
       toast({
