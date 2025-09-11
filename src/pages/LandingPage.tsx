@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
-import AboutSection from '@/components/AboutSection';
-import ServicesSection from '@/components/ServicesSection';
-import PainPointsSection from '@/components/PainPointsSection'; // New import
-import ProgressSection from '@/components/ProgressSection'; // New import
-import ClientsSection from '@/components/ClientsSection';
-import PricingSection from '@/components/PricingSection';
-import ReviewsSection from '@/components/ReviewsSection';
-import ContactUsSection from '@/components/ContactUsSection'; // New import
-import FaqSection from '@/components/FaqSection'; // New import
-import FooterSection from '@/components/FooterSection';
-import AccordionSection from '@/components/AccordionSection';
-import LogoCarouselSection from '@/components/LogoCarouselSection';
+
+const AboutSection = lazy(() => import('@/components/AboutSection'));
+const ServicesSection = lazy(() => import('@/components/ServicesSection'));
+const PainPointsSection = lazy(() => import('@/components/PainPointsSection'));
+const ProgressSection = lazy(() => import('@/components/ProgressSection'));
+const ClientsSection = lazy(() => import('@/components/ClientsSection'));
+const PricingSection = lazy(() => import('@/components/PricingSection'));
+const ReviewsSection = lazy(() => import('@/components/ReviewsSection'));
+const ContactUsSection = lazy(() => import('@/components/ContactUsSection'));
+const FaqSection = lazy(() => import('@/components/FaqSection'));
+const FooterSection = lazy(() => import('@/components/FooterSection'));
+const AccordionSection = lazy(() => import('@/components/AccordionSection'));
+const LogoCarouselSection = lazy(() => import('@/components/LogoCarouselSection'));
+
+const SectionLoader = () => <div>Loading...</div>;
 
 const LandingPage = () => {
   return (
@@ -21,18 +24,20 @@ const LandingPage = () => {
         <Navbar />
       </div>
       <HeroSection />
-      <AboutSection />
-      <LogoCarouselSection />
-      <PainPointsSection /> {/* New section */}
-      <ServicesSection />
-      <AccordionSection />
-      <ProgressSection /> {/* New section */}
-      <FaqSection /> {/* New section */}
-      {/* <ClientsSection /> */}
-      <PricingSection /> 
-      {/* <ReviewsSection /> */}
-      <ContactUsSection /> {/* New section */}
-      <FooterSection />
+      <Suspense fallback={<SectionLoader />}>
+        <AboutSection />
+        <LogoCarouselSection />
+        <PainPointsSection />
+        <ServicesSection />
+        <AccordionSection />
+        <ProgressSection />
+        <FaqSection />
+        {/* <ClientsSection /> */}
+        <PricingSection />
+        {/* <ReviewsSection /> */}
+        <ContactUsSection />
+        <FooterSection />
+      </Suspense>
     </div>
   );
 };

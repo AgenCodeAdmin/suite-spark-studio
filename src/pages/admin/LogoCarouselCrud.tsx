@@ -277,7 +277,7 @@ const LogoCarouselCrud: React.FC = () => {
               {/* <TableCell>{logo.id}</TableCell> */}
               <TableCell>{logo.order_index}</TableCell> {/* Display order_index */}
               <TableCell>
-                <img src={logo.image_url} alt={logo.alt_text} className="h-12 w-auto object-contain" />
+                <img src={logo.image_url} alt={logo.alt_text} className="h-12 w-auto object-contain" loading="lazy" decoding="async" />
               </TableCell>
               <TableCell>{logo.alt_text}</TableCell>
               <TableCell className="flex space-x-2">

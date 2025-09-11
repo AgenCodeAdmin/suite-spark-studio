@@ -18,6 +18,8 @@ import { DateRange } from 'react-day-picker';
 import { SubmissionPreviewDialog } from './SubmissionPreviewDialog';
 import { ArrowUpDown } from 'lucide-react';
 
+import DOMPurify from 'dompurify';
+
 export interface ContactSubmission {
   id: number;
   created_at: string;
@@ -228,8 +230,9 @@ const ContactSubmissionsCrud: React.FC = () => {
               <TableCell>{submission.email}</TableCell>
               <TableCell>{submission.phone_number}</TableCell>
               <TableCell>{submission.business_name}</TableCell>
-              <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
-                {submission.message}
+              <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(submission.message || '') }}
+              >
               </TableCell>
               <TableCell className="w-64">
                 <Textarea

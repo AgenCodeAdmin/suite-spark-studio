@@ -77,7 +77,7 @@ const ServiceDetailPage = () => {
   return (
     <div className="bg-white text-gray-800">
       <header className="relative">
-        <img src={service.image_url} alt={service.title} className="w-full h-96 object-cover" />
+        <img src={service.image_url} alt={service.title} className="w-full h-96 object-cover" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <h1 className="text-5xl font-bold text-white text-center px-4">{service.title}</h1>
         </div>

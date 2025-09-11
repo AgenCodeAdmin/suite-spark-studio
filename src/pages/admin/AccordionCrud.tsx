@@ -150,7 +150,7 @@ const AccordionCrud = () => {
             <TableRow key={item.id}>
               <TableCell>{item.heading}</TableCell>
               <TableCell>{item.description.substring(0, 50)}...</TableCell>
-              <TableCell><img src={item.image_url} alt="" className="w-16 h-16 object-cover" /></TableCell>
+              <TableCell><img src={item.image_url} alt="" className="w-16 h-16 object-cover" loading="lazy" decoding="async" /></TableCell>
               <TableCell>{item.order_index}</TableCell>
               <TableCell>
                 <Button variant="outline" size="sm" onClick={() => setEditingItem(item)}>

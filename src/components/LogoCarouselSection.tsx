@@ -117,7 +117,7 @@ const LogoCarouselSection = () => {
               <div className="logo-scrolling-content-rtl">
                 {duplicatedLogos.map((logo, index) => (
                   <div key={`${logo.id}-${index}`} className="logo-item">
-                    <img src={logo.image_url} alt={logo.alt_text || ""} />
+                    <img src={logo.image_url} alt={logo.alt_text || ""} loading="lazy" decoding="async" />
                   </div>
                 ))}
               </div>
@@ -126,7 +126,7 @@ const LogoCarouselSection = () => {
               <div className="logo-scrolling-content-ltr">
                 {duplicatedLogos.map((logo, index) => (
                   <div key={`${logo.id}-${index}`} className="logo-item">
-                    <img src={logo.image_url} alt={logo.alt_text || ""} />
+                    <img src={logo.image_url} alt={logo.alt_text || ""} loading="lazy" decoding="async" />
                   </div>
                 ))}
               </div>

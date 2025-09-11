@@ -116,6 +116,8 @@ const AboutSection = () => {
                 src={content.image_url}
                 alt="About Us"
                 className="w-full h-full object-contain rounded-xl shadow-lg image-zoom-hover"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className={`lg:col-span-3 order-2 space-y-6 ${isVisible ? 'text-rise-animation' : 'opacity-0'}`}>

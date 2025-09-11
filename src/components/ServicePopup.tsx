@@ -33,6 +33,8 @@ const ServicePopup: React.FC<ServicePopupProps> = ({ service, onClose }) => {
               src={service.image_url}
               alt={service.title}
               className="w-auto h-full object-contain rounded-xl shadow-lg"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="mt-20 text-gray-800 leading-relaxed text-base sm:text-lg tiptap-content" style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>

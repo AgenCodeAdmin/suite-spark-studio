@@ -104,7 +104,7 @@ const ClientsSection = () => {
           <div className="clients-scrolling-content">
             {duplicatedClients.map((client, index) => (
               <div key={`${client.id}-${index}`} className="client-logo">
-                <img src={client.logo_url} alt={client.name} />
+                <img src={client.logo_url} alt={client.name} loading="lazy" decoding="async" />
               </div>
             ))}
           </div>

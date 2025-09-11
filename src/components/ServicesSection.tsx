@@ -93,6 +93,8 @@ const ServicesSection = () => {
                   src={service.image_url}
                   alt={service.title}
                   className="w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
