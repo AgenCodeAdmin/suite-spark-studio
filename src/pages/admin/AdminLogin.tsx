@@ -27,7 +27,7 @@ const AdminLogin = () => {
       if (error) {
         toast({
           title: 'Login Failed',
-          description: error.message,
+          description: 'Invalid credentials',
           variant: 'destructive',
         });
         return;
