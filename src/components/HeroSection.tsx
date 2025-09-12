@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import parse from 'html-react-parser';
 import { Button } from '@/components/ui/button';
 import LightRays from '@/components/ui/light-rays';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getHeroContent } from '@/lib/data/hero';
 
-interface HeroContent {
+export interface HeroContent {
   headline: string;
   subheadline: string;
   background_image_url: string;
@@ -15,35 +16,12 @@ interface HeroContent {
 
 const HeroSection = () => {
   const isMobile = useIsMobile();
-  const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: heroContent, isLoading, isError } = useQuery<HeroContent | null>({
+    queryKey: ['hero_content'],
+    queryFn: getHeroContent,
+  });
 
-  useEffect(() => {
-    const fetchHeroContent = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('hero_content')
-          .select('*')
-          .limit(1)
-          .single();
-
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching hero content:', error);
-        } else if (data) {
-          console.log('Hero content fetched:', data);
-          setHeroContent(data);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHeroContent();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <section id="home" className="min-h-screen flex items-center justify-center">
         <div className="flex items-center justify-center">
@@ -53,13 +31,11 @@ const HeroSection = () => {
     );
   }
 
-  
-
-  if (!heroContent) {
+  if (isError || !heroContent) {
     return (
       <section id="home" className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center text-gray-600">
-          <p>No Hero content found. Please add content from the Admin Dashboard.</p>
+          <p>No Hero content found or an error occurred. Please add content from the Admin Dashboard.</p>
         </div>
       </section>
     );

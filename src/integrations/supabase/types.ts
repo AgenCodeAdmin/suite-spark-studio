@@ -41,6 +41,30 @@ export type Database = {
         }
         Relationships: []
       }
+      accordion_content: {
+        Row: {
+          description: string
+          heading: string
+          id: string
+          image_url: string
+          order_index: number
+        }
+        Insert: {
+          description: string
+          heading: string
+          id?: string
+          image_url: string
+          order_index: number
+        }
+        Update: {
+          description?: string
+          heading?: string
+          id?: string
+          image_url?: string
+          order_index?: number
+        }
+        Relationships: []
+      }
       admin_users: {
         Row: {
           created_at: string
@@ -95,6 +119,57 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_submissions: {
+        Row: {
+          admin_notes: string | null
+          assigned_to: string | null
+          assigned_to_emails: string[] | null
+          business_name: string
+          checked: boolean | null
+          created_at: string
+          email: string
+          follow_up_date: string | null
+          full_name: string
+          id: number
+          message: string | null
+          phone_number: string
+          services_of_interest: string[] | null
+          status: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          assigned_to?: string | null
+          assigned_to_emails?: string[] | null
+          business_name: string
+          checked?: boolean | null
+          created_at?: string
+          email: string
+          follow_up_date?: string | null
+          full_name: string
+          id?: number
+          message?: string | null
+          phone_number: string
+          services_of_interest?: string[] | null
+          status?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          assigned_to?: string | null
+          assigned_to_emails?: string[] | null
+          business_name?: string
+          checked?: boolean | null
+          created_at?: string
+          email?: string
+          follow_up_date?: string | null
+          full_name?: string
+          id?: number
+          message?: string | null
+          phone_number?: string
+          services_of_interest?: string[] | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       customer_reviews: {
         Row: {
           company_name: string
@@ -125,6 +200,30 @@ export type Database = {
           order_index?: number | null
           review_text?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      faqs: {
+        Row: {
+          answer: string
+          created_at: string
+          id: number
+          order_index: number | null
+          question: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: number
+          order_index?: number | null
+          question: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: number
+          order_index?: number | null
+          question?: string
         }
         Relationships: []
       }
@@ -162,6 +261,7 @@ export type Database = {
         Row: {
           background_image_url: string | null
           created_at: string
+          cta_link: string | null
           cta_text: string | null
           headline: string
           id: string
@@ -171,6 +271,7 @@ export type Database = {
         Insert: {
           background_image_url?: string | null
           created_at?: string
+          cta_link?: string | null
           cta_text?: string | null
           headline: string
           id?: string
@@ -180,6 +281,7 @@ export type Database = {
         Update: {
           background_image_url?: string | null
           created_at?: string
+          cta_link?: string | null
           cta_text?: string | null
           headline?: string
           id?: string
@@ -188,10 +290,67 @@ export type Database = {
         }
         Relationships: []
       }
-      pricing_plans: {
+      logo_carousel: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          display_order: number
+          id: number
+          image_url: string
+          order_index: number | null
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number
+          id?: number
+          image_url: string
+          order_index?: number | null
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number
+          id?: number
+          image_url?: string
+          order_index?: number | null
+        }
+        Relationships: []
+      }
+      pain_points: {
         Row: {
           created_at: string
+          description: string
+          icon: string
+          id: number
+          order_index: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          icon: string
+          id?: number
+          order_index?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: number
+          order_index?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
+      pricing_plans: {
+        Row: {
+          choose_plan_link: string | null
+          created_at: string
+          description: string | null
           features: string[]
+          icon: string | null
           id: string
           is_featured: boolean | null
           name: string
@@ -200,8 +359,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          choose_plan_link?: string | null
           created_at?: string
+          description?: string | null
           features?: string[]
+          icon?: string | null
           id?: string
           is_featured?: boolean | null
           name: string
@@ -210,14 +372,74 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          choose_plan_link?: string | null
           created_at?: string
+          description?: string | null
           features?: string[]
+          icon?: string | null
           id?: string
           is_featured?: boolean | null
           name?: string
           order_index?: number | null
           price?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_roles"]
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          role?: Database["public"]["Enums"]["user_roles"]
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_roles"]
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      progress_stages: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          order_index: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: number
+          order_index?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          order_index?: number | null
+          title?: string
         }
         Relationships: []
       }
@@ -228,6 +450,11 @@ export type Database = {
           id: string
           image_url: string | null
           order_index: number | null
+          page_content: string | null
+          popup_button_link: string | null
+          popup_button_text: string | null
+          popup_description: string | null
+          slug: string | null
           title: string
           updated_at: string
         }
@@ -237,6 +464,11 @@ export type Database = {
           id?: string
           image_url?: string | null
           order_index?: number | null
+          page_content?: string | null
+          popup_button_link?: string | null
+          popup_button_text?: string | null
+          popup_description?: string | null
+          slug?: string | null
           title: string
           updated_at?: string
         }
@@ -246,32 +478,73 @@ export type Database = {
           id?: string
           image_url?: string | null
           order_index?: number | null
+          page_content?: string | null
+          popup_button_link?: string | null
+          popup_button_text?: string | null
+          popup_description?: string | null
+          slug?: string | null
           title?: string
           updated_at?: string
         }
         Relationships: []
       }
-      logo_carousel: {
+      submission_service_interests: {
         Row: {
-          id: number
           created_at: string
-          image_url: string
-          alt_text: string | null
-          display_order: number
+          id: number
+          name: string
         }
         Insert: {
-          id?: number
           created_at?: string
-          image_url: string
-          alt_text?: string | null
-          display_order?: number
+          id?: number
+          name: string
         }
         Update: {
-          id?: number
           created_at?: string
-          image_url?: string
-          alt_text?: string | null
-          display_order?: number
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      submission_statuses: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      website_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          setting_name: string
+          setting_value: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          setting_name: string
+          setting_value?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          setting_name?: string
+          setting_value?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -280,10 +553,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      handle_contact_form: {
+        Args: {
+          p_business_name: string
+          p_email: string
+          p_full_name: string
+          p_message: string
+          p_phone_number: string
+        }
+        Returns: undefined
+      }
+      is_admin: {
+        Args: Record<string, never>
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_roles: "admin" | "editor" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -410,6 +696,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_roles: ["admin", "editor", "viewer"],
+    },
   },
 } as const

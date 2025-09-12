@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
+import { useUserRole } from '@/hooks/use-user-role'; // Import useUserRole
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { role, loading: roleLoading } = useUserRole(); // Use the hook
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +31,11 @@ const Navbar = () => {
     { label: 'Contact Us', id: 'contact-us' },
   ];
 
+  // Add Admin Dashboard link if user is admin or editor
+  if (!roleLoading && (role === 'admin' || role === 'editor')) {
+    navLinks.push({ label: 'Admin Dashboard', id: 'admin-dashboard', path: '/admin/dashboard' });
+  }
+
   return (
     <div className="relative w-[95%] max-w-7xl">
       <nav
@@ -48,13 +56,23 @@ const Navbar = () => {
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className="nav-link text-black hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 transform relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-sky-400 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-              >
-                {link.label}
-              </button>
+              link.path ? ( // Use Link for admin dashboard
+                <Link
+                  key={link.id}
+                  to={link.path}
+                  className="nav-link text-black hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 transform relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-sky-400 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className="nav-link text-black hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 transform relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-sky-400 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
           </div>
 
@@ -82,13 +100,23 @@ const Navbar = () => {
           <div className="glass-card m-4 rounded-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navLinks.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  className="text-gray-700 hover:text-primary block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-colors duration-200"
-                >
-                  {link.label}
-                </button>
+                link.path ? ( // Use Link for admin dashboard in mobile menu
+                  <Link
+                    key={link.id}
+                    to={link.path}
+                    className="text-gray-700 hover:text-primary block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <button
+                    key={link.id}
+                    onClick={() => scrollToSection(link.id)}
+                    className="text-gray-700 hover:text-primary block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-colors duration-200"
+                  >
+                    {link.label}
+                  </button>
+                )
               ))}
             </div>
           </div>

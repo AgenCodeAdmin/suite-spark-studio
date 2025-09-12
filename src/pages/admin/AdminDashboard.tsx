@@ -18,11 +18,14 @@ import PricingCrud from '@/pages/admin/PricingCrud';
 import ReviewsCrud from '@/pages/admin/ReviewsCrud';
 import FooterCrud from '@/pages/admin/FooterCrud';
 import GlobalSettingsCrud from '@/pages/admin/GlobalSettingsCrud';
+import UserManagement from '@/pages/admin/UserManagement'; // Import UserManagement
+import { useUserRole } from '@/hooks/use-user-role'; // Import useUserRole
 import { cn } from '@/lib/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { role, loading: roleLoading } = useUserRole(); // Use the hook
   const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContentManagementOpen, setIsContentManagementOpen] = useState(true);
@@ -41,6 +44,11 @@ const AdminDashboard = () => {
     await supabase.auth.signOut();
     navigate('/admin/login');
   };
+
+  // Don't render navigation until role is loaded
+  if (roleLoading) {
+    return <div>Loading dashboard...</div>;
+  }
 
   const navigationContent = (
     <TabsList className={cn(
@@ -72,6 +80,12 @@ const AdminDashboard = () => {
           <TabsTrigger value="global-settings" className="w-full justify-start">Global Settings</TabsTrigger>
         </CollapsibleContent>
       </Collapsible>
+
+      {role === 'admin' && ( // Conditionally render for admin
+        <TabsTrigger value="user-management" className="w-full justify-start text-base font-bold">
+          User Management
+        </TabsTrigger>
+      )}
     </TabsList>
   );
 
@@ -134,6 +148,9 @@ const AdminDashboard = () => {
                 <TabsContent value="contact-submissions"><ContactSubmissionsCrud /></TabsContent>
                 <TabsContent value="faqs"><FaqCrud /></TabsContent>
                 <TabsContent value="global-settings"><GlobalSettingsCrud /></TabsContent>
+                {role === 'admin' && ( // Conditionally render for admin
+                  <TabsContent value="user-management"><UserManagement /></TabsContent>
+                )}
               </div>
             </div>
           </div>

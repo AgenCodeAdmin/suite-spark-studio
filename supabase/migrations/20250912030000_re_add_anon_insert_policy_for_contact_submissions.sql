@@ -1,0 +1,2 @@
+-- Re-add the policy to allow anonymous users to insert into contact_submissions
+CREATE POLICY "Allow anonymous insert for contact_submissions" ON public.contact_submissions FOR INSERT TO anon WITH CHECK (true);
